@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#include "common/css.html"/>
+</head>
+<body class="module uimo ui-c3">
+	<section class="container">
+	<#include "common/header.html"/>
+	<div class="content-wrap">
+		<div class="content" id="pjax-container">
+			${ctitle!''}
+      		${content!}
+      		${pagination!}
+		</div>
+	</div>
+	<aside class="sidebar">	
+		${motto!}
+		<div class="widget widget_searchbox"><h3 class="title"><strong>搜索</strong></h3><form method="get" class="search-form" action="${(request.contextPath)!}/search" onsubmit="return $.OP.sc(this);"><input class="form-control" name="s" type="text" placeholder="输入关键字" value=""><input class="btn" type="submit" value="搜索"></form></div>
+		<div class="widget widget_postlist"><h3 class="title"><strong>随机推荐</strong></h3>
+			<ul class="items-01">${random!}</ul>
+		</div>
+		<div class="widget widget_ads">
+			<div class="widget_ads_inner"><a href="/" target="_blank"><img src="${(request.contextPath)!}/static/f/images/yunjianxu.gif"></a></div>
+		</div>
+		<div class="widget widget_tags" style="margin-bottom:0;">
+			<h3 class="title"><strong>热门标签</strong></h3>
+			<ul class="widget_tags_inner">
+				${htags!}
+			</ul>
+		</div>
+	</aside>
+			<#include "common/footer.html"/>
+	</section>
+	<#include "common/javascript.html"/>
+</body>
+</html>

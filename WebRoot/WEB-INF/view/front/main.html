@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#assign title = "${(account.nick_name)!}"/>
+<#include "common/css.html"/>
+<style type="text/css">
+	.art-opt {margin-left:10px;}
+</style>
+</head>
+<body class="main uimo ui-c3">
+<section class="container">
+  <#include "common/header.html"/>
+  <div class="content-wrap">
+  	<div class="user-info">
+    	<section class="info-content">
+        	<header id="info-header">
+            	<!-- 头像，昵称，与简介 -->
+                <div class="user-avatar">
+                	<img alt="avatar" src="${(request.contextPath)!}${(account.acc_avatar)!}"/>
+                </div>
+                <h1 class="user-name">${(account.nick_name)!}</h1>
+                <p class="user-p user-intro">${(account.acc_intro)!}</p>
+                <p class="user-p user-count">
+                    ${count!}
+                </p>
+            </header>
+            <#if follow??>
+	            <div id="info-follow" class="info-follow">
+					${follow!}            
+	            </div>
+            </#if>
+            ${types!}
+            <!-- <footer>
+            	<div>
+                    关注我:
+                    <span class="follow-me follow-me-wechat" onMouseOver="$('#code-img').attr('src','${(request.contextPath)!}/static/f/images/code.jpeg').show();" onMouseOut="$('#code-img').attr('src','').hide();"></span>
+                    <span class="follow-me follow-me-weibo" onMouseOver="$('#code-img').attr('src','${(request.contextPath)!}/static/f/images/code1.jpeg').show();" onMouseOut="$('#code-img').attr('src','').hide();"></span>
+                </div>
+                <div id="code-container">
+                	<img id="code-img" src="" style="display:none;"/>
+                </div>
+            </footer> -->
+        </section>
+    </div>
+    <div class="content" id="pjax-container">
+      ${ctitle!}
+      ${content!}
+      ${pagination!}
+    </div>
+  </div>
+  <#include "common/footer.html"/>
+</section>
+<#include "common/javascript.html"/>
+<script type='text/javascript' src='${(request.contextPath)!}/static/f/js/qt-opt.js?ver=5.3'></script>
+</body>
+</html>

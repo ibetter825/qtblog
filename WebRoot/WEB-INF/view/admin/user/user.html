@@ -1,0 +1,332 @@
+﻿<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>用户管理</title>
+   <#include "../../common/includes/base_header.html"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.min.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/validation/css/validationEngine.jquery.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/css/chosen.css"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/css/local/yt.css"/>
+</head>
+<body style="background-color: #FFFFFF;">
+   <div class="container-fluid">
+      <div class="row-fluid">
+      	<#include "../../common/includes/route.html"/>
+      </div>
+      <!-- SEARCH -->
+      <div class="row-fluid">
+      	<div class="span12">
+             <div class="widget blue">
+                 <div class="widget-title">
+                     <h4><i class="icon-search"></i> 查询条件</h4>
+                     <span class="tools">
+                         <a href="javascript:;" class="icon-chevron-down"></a>
+                     </span>
+                 </div>
+                 <div class="widget-body form">
+                     <form class="cmxform form-horizontal" id="search-form" method="post" onsubmit="return search();">
+						<div class="control-group">
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_user_name">登录名称:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_user_name" name="user.user_name[%]" type="text" />
+						    </div>
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_real_name">真实姓名:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_real_name" name="info.real_name[%]" type="text" />
+						    </div>
+						    <div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_user_gender">用户性别:&nbsp;&nbsp;</label>
+					    		<select data-placeholder="选择用户性别" tabindex="2" id="searh_user_gender" name="info.user_gender[eq]">
+                                    <option value="">请选择...</option>
+                                    <option value="1">男性</option>
+                                    <option value="0">女性</option>
+                                </select>
+					    	</div>
+					    	<div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_role_no">用户角色:&nbsp;&nbsp;</label>
+					    		<select data-placeholder="选择用户角色" tabindex="2" id="searh_role_no" name="user.role_no[%]">
+                                    <option value="">请选择...</option>
+                                </select>
+					    	</div>
+					    	<div class="input-container">
+					    		<button class="btn btn-primary" type="submit"><i class="icon-ok"></i>&nbsp;&nbsp;查询</button>
+                   				<button class="btn btn-warning" type="reset"><i class="icon-repeat"></i>&nbsp;&nbsp;重置</button>
+                   			</div>
+						</div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+      </div>
+      <!-- MAIN -->
+      <div class="row-fluid">
+          <div class="span12">
+              <div class="widget blue">
+                   <div class="widget-title">
+                       <h4><i class="icon-reorder"></i> 用户列表</h4>
+                           <span class="tools">
+                               <a href="javascript:;" class="icon-chevron-down"></a>
+                           </span>
+                   </div>
+                   <div class="widget-body">
+                   	   <#include "../../common/includes/toolbar.html"/>
+                       <table id="grid" class="table table-condensed table-hover table-striped">
+						    <thead>
+						        <tr>
+						        	<th data-column-id="user_no" data-identifier="true" data-sortable="false" data-visible="false"></th>
+						            <th data-column-id="user_name" data-sortable="false">登录名称</th>
+						            <th data-column-id="real_name" data-sortable="false">真实姓名</th>
+						            <th data-column-id="user_state" data-formatter="fUserState">用户状态</th>
+						            <th data-column-id="role_no">用户角色</th>
+						            <th data-column-id="user_gender" data-formatter="fUserGender">用户性别</th>
+						            <th data-column-id="user_phone" data-sortable="false">用户电话</th>
+						            <th data-column-id="user_email" data-sortable="false">邮箱地址</th>
+						        </tr>
+						    </thead>
+					   </table>
+                   </div>
+               </div>
+          </div>
+      </div>
+   </div>
+   <!-- model -->
+   <div id="model-form" class="modal hide fade widget blue" tabindex="-1" role="dialog" data-remote="" aria-labelledby="model-form-label" aria-hidden="true">
+       <div class="modal-header widget-title">
+           <h4 id="model-form-label"><i class="icon-plus"></i> 添加用户</h4>
+           <span class="tools">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+           </span>
+       </div>
+       <form class="cmxform form-horizontal" id="dto-form" method="get" action="#">
+	       <div class="modal-body" style="max-height:400px;">
+	       	   <div class="row-fluid">
+				<div class="control-group">
+					<div class="span4">
+				    	<label class="control-label" for="user_name">登录名称:</label>
+				    </div>
+				    <div class="span6">
+				        <input class="input-block-level validate[required,maxSize[20],custom[onlyLetterNumberUnderline],ajax[ajaxUserName]]" id="user_name" name="user.user_name" type="text"/>
+				        <input id="user_no" name="user.user_no" type="hidden" value=""/>
+				        <input name="opt_type" type="hidden" value="add"/>
+				    </div>
+				</div>
+				<div class="control-group">
+					<div class="span4">
+				    	<label class="control-label" for="real_name">真实姓名:</label>
+				    </div>
+				    <div class="span6" style="position: relative;">
+						<input class="input-block-level validate[required,maxSize[50]]" id="real_name" name="info.real_name" type="text"/>
+				    </div>
+				</div>
+				<div class="control-group">
+					<div class="span4">
+				    	<label class="control-label" for="role_no">用户角色:</label>
+				    </div>
+				    <div class="span6">
+				    	<select class="input-block-level" id="role_no" name="user.role_no">
+				    		<option value="">请选择...</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group">
+					<div class="span4">
+				    	<label class="control-label" for="user_state">用户状态:</label>
+				    </div>
+				    <div class="span6">
+				    	<select class="input-block-level" id="user_state" name="user.user_state">
+				    		<option value="">请选择...</option>
+				    		<option value="1">正常状态</option>
+				    		<option value="0">限制登陆</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group">
+					<div class="span4">
+				    	<label class="control-label" for="user_gender">用户性别:</label>
+				    </div>
+				    <div class="span6">
+				        <select class="input-block-level" id="user_gender" name="info.user_gender">
+			    			<option value="1">男性</option>
+			    			<option value="0">女性</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group">
+					<div class="span4">
+				    	<label class="control-label" for="user_phone">用户电话:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level validate[custom[phone]] " id="user_phone" name="info.user_phone" type="text" />
+				    </div>
+				</div>
+				<div class="control-group">
+					<div class="span4">
+				    	<label class="control-label" for="user_email">邮箱地址:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level validate[custom[email]]" id="user_email" name="info.user_email" type="text" />
+				    </div>
+				</div>
+				<div class="control-group">
+					<div class="span4">
+				    	<label class="control-label" for="user_address">用户住址:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level" id="user_address" name="info.user_address" type="text" />
+				    </div>
+				</div>
+		       </div>
+		     </div>
+	       <div class="modal-footer">
+	       	   <button class="btn btn-primary" type="submit">保存</button>
+	           <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">取消</button>
+	       </div>
+       </form>
+   </div>
+   <#include "../../common/includes/base_javascript.html"/>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/lang/jquery.validationEngine-zh_CN.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/jquery.validationEngine.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/validationEngine-addition-rules.js"></script>
+   <!-- select加强版下拉框 -->
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/jquery.tagsinput.min.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/chosen.jquery.min.js"></script>
+   <script type="text/javascript">
+		"use strict";
+		var formObj = null, options = null;
+		function search(){
+	           var params = $('#search-form').serializeArray();
+	       	//grid.search(params);
+	       	$("#grid").bootgrid("search", params);
+	       	return false;
+	    }
+	    //弹出添加model
+	    function add(btn){
+	    	$('#model-form-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 添加用户');
+	    	$('input[name=user_type]').val('add');
+	    	$('#user_name').removeAttr('readonly').addClass('validate[required,maxSize[20],custom[onlyLetterNumberUnderline],ajax[ajaxUserName]]');
+	    	$('#model-form').modal('show');
+	    }
+	    //弹出修改model
+	    function modify(btn){
+	    	var opt = $(btn).attr('opt_param');
+			var ids = $("#grid").bootgrid("getSelectedRows");
+			if(ids.length == 0 || ids.length > 1){
+				yt.alert("错误：请选择一条记录!");
+				return;
+			}
+	    	$('#model-form-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 修改用户');
+	    	$.post(opt,{ids:ids.join(',')},function(data){
+			     var dto = data.data.dto;
+			     yt.fillForm($('#dto-form'), dto);
+			},'json');
+			$('input[name=opt_type]').val('modify');
+			$('#user_name').prop('readonly','readonly').removeClass().addClass('input-block-level');
+	    	$('#model-form').modal('show');
+	    }
+
+	    //弹出删除confirm
+	    function del(btn){
+	    	var opt = $(btn).attr('opt_param');
+	    	var ids = $("#grid").bootgrid("getSelectedRows");
+	    	if(ids.length == 0){
+				yt.alert("错误：请至少选择一条记录!");
+				return;
+			}
+	    	yt.confirm('确认要删除这些用户吗?', function(){
+	    		$.post(opt, {ids:ids.join(',')}, function(data){
+				     yt.alert(data, function(){
+						search();
+					});
+				},'json');
+	    	});
+	    }
+	    function rpwd(btn){
+	    	var opt = $(btn).attr('opt_param');
+	    	var ids = $("#grid").bootgrid("getSelectedRows");
+	    	if(ids.length == 0 || ids.length > 1){
+				yt.alert("错误：请选择一条记录!");
+				return;
+			}
+	    	yt.confirm('确认要重置该用户密码吗?', function(){
+	    		$.post(opt, {'user.user_no':ids.join(',')}, function(data){
+				     yt.alert(data);
+				},'json');
+	    	});
+	    }
+	    function getRoles(){
+	    	$.post("${(request.contextPath)!}${admin}/role/list",{rowCount:-1}, function(data){
+			     var roles = data.data.roles;
+			   	 var options = [];
+			   	 for(var i = 0; i < roles.length; i++)
+			   	 	options.push('<option value="'+roles[i].role_no+'">'+roles[i].role_name+'</option>');
+			   	 $("#searh_role_no,#role_no").append(options);
+			},'json');
+	    }
+	    $(function () {
+		    $("#grid").bootgrid({
+			    ajax: true,
+			    url: "${(request.contextPath)!}${admin}/user/list",
+			    selection: true,
+			    multiSelect: true,
+			    rowSelect: true,
+			    keepSelection: false,
+			    rowCount: [10, 25, 50, 100, 200],
+			    formatters: {
+			        "fUserState": function(column, row){
+			        	var state = Number(row.user_state);
+				    	if(state == 0)
+				    		return '<font color="#DC5D3A">限制登陆</font>';
+				    	else if(state == 1)
+				    		return '<font color="#2FADE7">正常状态</font>';
+				    	else
+				    		return '<font color="#999999">未知</font>';
+			        },
+			        "fUserGender": function(column, row){
+			        	var gender = row.user_gender;
+				    	if(gender == 0)
+				    		return '<span class="icon-female" title="女性" style="color:#FB9800;"></span>';
+				    	else if(gender == 1)
+				    		return '<span class="icon-male" title="男性" style="color:#4A8BC2;"></span>';
+			        }
+			    }
+			});
+			
+			//关闭Model后清空表单数据
+		   $('#model-form').on('hidden.bs.modal', function (e) {
+		   		$('#user_no').val('');
+			  	$('#dto-form')[0].reset();
+			  	$('#dto-form').validationEngine('hideAll');
+			});
+			//美化滚动条
+			$(".modal-body").niceScroll({styler:"fb",cursorcolor:"#4A8BC2", cursorwidth: '8', cursorborderradius: '0px', background: '#404040', cursorborder: '', zindex: '1000'});
+		    
+			$.validationEngineLanguage.allRules.ajaxUserName = {
+					  'url': '${(request.contextPath)!}${admin}/user/vali', /* 验证程序地址 */
+		    	      'alertTextOk': '* 用户名可以使用',
+		    	      'alertText': '* 用户名已存在',
+		    	      'alertTextLoad': '* 正在验证,请稍等'
+	        };
+			// 校验插件初始化，注意校验只能初始化一遍（注意需要在全局设置之后进行初始化，这样全局设置才起作用）
+	        $("#dto-form").validationEngine('attach', {
+				  promptPosition: 'bottomRight',
+				  maxErrorsPerField: 1,
+				  showOneMessage: true,
+				  onSuccess: false,
+				  ajaxFormValidation: true,
+				  ajaxFormValidationURL: '${(request.contextPath)!}${admin}/operate?mid=M9902&opt=save',
+				  ajaxFormValidationMethod: 'post',
+				  onAjaxFormComplete: function(status, form, json, options){
+						$('#model-form').modal('hide');
+					    yt.alert(json, function(){
+							search();
+						});
+			        }
+			});
+			getRoles();
+		});
+   </script>
+</body>
+</html>

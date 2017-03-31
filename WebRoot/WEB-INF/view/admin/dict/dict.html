@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>数据字典管理</title>
+   <#include "../../common/includes/base_header.html"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.min.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/validation/css/validationEngine.jquery.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/css/chosen.css"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/css/local/yt.css"/>
+</head>
+<body style="background-color: #FFFFFF;">
+   <div class="container-fluid">
+      <div class="row-fluid">
+      	<#include "../../common/includes/route.html"/>
+      </div>
+      <!-- SEARCH -->
+      <div class="row-fluid">
+      	<div class="span12">
+             <div class="widget blue">
+                 <div class="widget-title">
+                     <h4><i class="icon-search"></i> 查询条件</h4>
+                     <span class="tools">
+                         <a href="javascript:;" class="icon-chevron-down"></a>
+                     </span>
+                 </div>
+                 <div class="widget-body form">
+                     <form class="cmxform form-horizontal" id="search-form" method="post" onsubmit="return search();">
+						<div class="control-group">
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_dict_no">字典编号:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_dict_no" name="dict.dict_no[%]" type="text" />
+						    </div>
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_dict_name">字典名称:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_dict_name" name="dict.dict_name[%]" type="text" />
+						    </div>
+						    <div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_dict_fno">父级编号:&nbsp;&nbsp;</label>
+					    		<input class="" id="searh_dict_fno" name="dict.dict_fno[%]" type="text" />
+					    	</div>
+					    	<div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_dict_state">字典状态:&nbsp;&nbsp;</label>
+					    		<select data-placeholder="选择字典状态" tabindex="2" id="searh_dict_state" name="dict.dict_state[eq]">
+                                    <option value="">请选择...</option>
+                                    <option value="1">有效</option>
+                                    <option value="0">无效</option>
+                                </select>
+					    	</div>
+					    	<div class="input-container">
+					    		<button class="btn btn-primary" type="submit"><i class="icon-ok"></i>&nbsp;&nbsp;查询</button>
+                   				<button class="btn btn-warning" type="reset"><i class="icon-repeat"></i>&nbsp;&nbsp;重置</button>
+                   			</div>
+						</div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+      </div>
+      <!-- MAIN -->
+      <div class="row-fluid">
+          <div class="span12">
+              <div class="widget blue">
+                   <div class="widget-title">
+                       <h4><i class="icon-reorder"></i> 字典列表</h4>
+                           <span class="tools">
+                               <a href="javascript:;" class="icon-chevron-down"></a>
+                           </span>
+                   </div>
+                   <div class="widget-body">
+                   	   <#include "../../common/includes/toolbar.html"/>
+                       <table id="grid" class="table table-condensed table-hover table-striped">
+						    <thead>
+						        <tr>
+						            <th data-column-id="dict_no" data-identifier="true" data-order="asc">字典编号</th>
+						            <th data-column-id="dict_fno">父级字典</th>
+						            <th data-column-id="dict_name" data-sortable="false">字典名称</th>
+						            <th data-column-id="dict_desc" data-sortable="false">字典描述</th>
+						            <th data-column-id="dict_param" data-sortable="false">字典参数</th>
+						            <th data-column-id="dict_state" data-formatter="fdictState">字典状态</th>
+						            <th data-column-id="dict_icon" data-sortable="false" data-formatter="fDictIcon">菜单图标</th>
+						        </tr>
+						    </thead>
+					   </table>
+                   </div>
+               </div>
+          </div>
+      </div>
+   </div>
+   <!-- model -->
+   <div id="model-dict" class="modal hide fade widget blue" tabindex="-1" role="dialog" data-remote="" aria-labelledby="model-dict-label" aria-hidden="true">
+       <div class="modal-header widget-title">
+           <h4 id="model-dict-label"><i class="icon-plus"></i> 添加字典</h4>
+           <span class="tools">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+           </span>
+       </div>
+       <form class="cmxform form-horizontal" id="dict-form" method="get" action="#">
+	       <div class="modal-body" style="max-height:500px;">
+	       	   <div class="row-fluid">
+		         <div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="dict_no">字典编号:</label>
+				    </div>
+				    <div class="span6">
+					    <input class="input-block-level validate[required,custom[onlyLetterNumberUnderline],maxSize[20],ajax[ajaxDictNo]]" id="dict_no" name="dict.dict_no" type="text"/>
+					    <input name="opt_type" type="hidden" value="add"/>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="dict_fno">父级字典:</label>
+				    </div>
+				    <div class="span6">
+						<select class="input-block-level chzn-select" tabindex="1" id="dict_fno" name="dict.dict_fno">
+				        	<option value="">选择父级</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="dict_name">字典名称:</label>
+				    </div>
+				    <div class="span6">
+				        <input class="input-block-level validate[required,maxSize[20]]" id="dict_name" name="dict.dict_name" type="text"/>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="dict_desc">字典描述:</label>
+				    </div>
+				    <div class="span6">
+				    	<textarea class="input-block-level" id="dict_desc" name="dict.dict_desc"></textarea>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="dict_param">字典参数:</label>
+				    </div>
+				    <div class="span6">
+				        <input class="input-block-level" id="dict_param" name="dict.dict_param" type="text"/>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="dict_seq">字典排序:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level validate[required,min[0],max[100]]" id="dict_seq" value="0" name="dict.dict_seq" type="number" />
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="dict_state">字典状态:</label>
+				    </div>
+				    <div class="span6">
+				    	<select class="input-block-level" id="dict_state" name="dict.dict_state">
+			    			<option value="1">有效</option>
+			    			<option selected value="0">无效</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="dict_icon">字典图标:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level " id="dict_icon" name="dict.dict_icon" type="text" />
+				    </div>
+				</div>
+		       </div>
+		     </div>
+	       <div class="modal-footer">
+	       	   <button class="btn btn-primary" type="submit">保存</button>
+	           <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">取消</button>
+	       </div>
+       </form>
+   </div>
+   <#include "../../common/includes/base_javascript.html"/>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/lang/jquery.validationEngine-zh_CN.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/jquery.validationEngine.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/validationEngine-addition-rules.js"></script>
+   <!-- select加强版下拉框 -->
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/jquery.tagsinput.min.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/chosen.jquery.min.js"></script>
+   <script type="text/javascript">
+		"use strict";
+		var formObj = null;//, options = null;
+		function search(){
+	           var params = $('#search-form').serializeArray();
+	       	//grid.search(params);
+	       	$("#grid").bootgrid("search", params);
+	       	return false;
+	    }
+	    //弹出添加model
+	    function add(btn){
+	    	var ids = $("#grid").bootgrid("getSelectedRows");
+	    	//如果选择了一条记录，那么就给该记录添加子元素
+			if(ids.length != 0 && ids.length == 1)
+				$('#dict_fno').find('option[value="'+ids+'"]').prop('selected', true).end().trigger('liszt:updated');
+				
+	    	$('#model-dict-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 添加字典');
+	    	$('input[name=opt_type]').val('add');
+	    	//$('#dict_state').prop('disabled', 'disabled');
+	    	$('#dict_no').removeAttr('readonly').addClass('validate[required,custom[onlyLetterNumberUnderline],maxSize[20],ajax[ajaxDictNo]]');
+	    	$('#model-dict').modal('show');
+	    }
+	    //弹出修改model
+	    function modify(btn){
+	    	var opt = $(btn).attr('opt_param');
+			var ids = $("#grid").bootgrid("getSelectedRows");
+			if(ids.length == 0 || ids.length > 1){
+				yt.alert("错误：请选择一条记录!");
+				return;
+			}
+	    	$('#model-dict-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 修改字典');
+	    	$.post(opt,{dict_no:ids.join(',')},function(data){
+			     var dto = data.data.dto;
+			     yt.fillForm($('#dict-form'), dto);
+			     //$('#dict_state').removeAttr('disabled');
+			},'json');
+			$('input[name=opt_type]').val('modify');
+			$('#dict_no').prop('readonly','readonly').removeClass().addClass('input-block-level');
+	    	$('#model-dict').modal('show');
+	    }
+	    //弹出删除confirm
+	    function del(btn){
+	    	var opt = $(btn).attr('opt_param');
+	    	var ids = $("#grid").bootgrid("getSelectedRows");
+	    	if(ids.length == 0){
+				yt.alert("错误：请至少选择一条记录!");
+				return;
+			}
+	    	yt.confirm('确认要删除这些字典吗?', function(){
+	    		$.post(opt, {ids:ids.join(',')}, function(data){
+				     yt.alert(data, function(){
+						search();
+					});
+				},'json');
+	    	});
+	    }
+			
+	    function getDictTree(){
+	    	$.post("${(request.contextPath)!}${admin}/dict/tree", function(data){
+			     var dicts = data.data.dicts;
+			     var options = getOptions(dicts);
+			     $('#dict_fno').find('option:gt(0)').remove().end().trigger('liszt:updated');
+			     $('#dict_fno').append(options).width(244);//244由于获取#dict_fno的outerWidth不准确手动设置值
+			     $("#dict_fno").chosen({
+					  no_results_text: "没有找到",
+					  search_contains: true
+				 });
+			},'json');
+	    };
+	    
+	    function getOptions(dicts){
+	    	var emsp = ['4','14','24','34'];
+	    	var str = '';
+			var length = dicts.length;
+			for(var i = 0; i < length; i++){
+				if(dicts[i].children.length > 0){
+					str += '<option value="'+dicts[i].id+'" style="padding-left:'+emsp[dicts[i].level]+'px; font-weight: bold;">'+dicts[i].name+'</option>';
+					str +=  getOptions(dicts[i].children);
+				}else
+					str += '<option value="'+dicts[i].id+'" style="padding-left:'+emsp[dicts[i].level]+'px;">'+dicts[i].name+'</option>';
+			}
+			return str;
+	    };
+	    
+	    $(function () {
+		    $("#grid").bootgrid({
+			    ajax: true,
+			    url: "${(request.contextPath)!}${admin}/dict/list",
+			    selection: true,
+			    multiSelect: true,
+			    rowSelect: true,
+			    keepSelection: false,
+			    formatters: {
+			        "fdictState": function(column, row){
+			        	var state = Number(row.dict_state);
+				    	if(state == 0)
+				    		return '<font color="#DC5D3A">无效</font>';
+				    	else if(state == 1)
+				    		return '<font color="#2FADE7">有效</font>';
+				    	else
+				    		return '<font color="#999999">未知</font>';
+			        },
+			        "fDictIcon": function(column, row){
+			        	return '<i class="'+row.dict_icon+'"></i>';
+			        }
+			    }
+			});
+			    
+			//关闭Model后清空表单数据
+		   $('#model-dict').on('hidden.bs.modal', function (e) {
+		   		$('#dict_fno').find('option:first-child').prop('selected', true).end().trigger('liszt:updated');//select选择置空
+			  	$('#dict-form')[0].reset();
+			  	$('#dict-form').validationEngine('hideAll');
+			});
+		   $.validationEngineLanguage.allRules.ajaxDictNo = {
+		    	   	  'url': '${(request.contextPath)!}${admin}/dict/vali',
+		    	      'alertTextOk': '* 编号可以使用',
+		    	      'alertText': '* 编号已存在',
+		    	      'alertTextLoad': '* 正在验证,请稍等'
+	        };
+		    // 校验插件初始化，注意校验只能初始化一遍（注意需要在全局设置之后进行初始化，这样全局设置才起作用）
+	        $("#dict-form").validationEngine('attach', {
+				  promptPosition: 'bottomRight',
+				  prettySelect: true,
+				  onSuccess: false,
+				  ajaxFormValidation: true,
+				  ajaxFormValidationURL: '${(request.contextPath)!}${admin}/operate?mid=M9907&opt=save',
+				  ajaxFormValidationMethod: 'post',
+				  onAjaxFormComplete: function(status, form, json, options){
+						$('#model-dict').modal('hide');
+					    yt.alert(json, function(){
+							search();
+						});
+			      }
+			});
+	        // 隐藏所有校验提示
+	        // $('#dict-form').validationEngine('hideAll');
+	        getDictTree();//初始化下拉框
+		});
+   </script>
+</body>
+</html>

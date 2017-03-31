@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#assign title = "${(account.nick_name)!} - 个人主页 - 云间叙"/>
+<#include "common/css.html"/>
+<style type="text/css">
+	.art-opt {margin-left:10px;}
+</style>
+</head>
+<body class="zone uimo ui-c3">
+<section class="container">
+  <#include "common/header.html"/>
+  <div class="content-wrap">
+  	<div class="user-info">
+    	<section class="info-content">
+        	<header>
+            	<!-- 头像，昵称，与简介 -->
+                <div class="user-avatar">
+                	<img alt="avatar" src="${(request.contextPath)!}${(account.acc_avatar)!}"/>
+                </div>
+                <h1 class="user-name">${(account.nick_name)!}</h1>
+                <p class="user-p user-intro">${(account.acc_intro)!}</p>
+                <p class="user-p user-count">
+                    ${count!}
+                </p>
+            </header>
+            <ul class="user-content">
+              <li><a href="${(request.contextPath)!}/article/write"><i class="glyphicon glyphicon-pencil"></i>写博客</a></li>
+              <li><a class="pjax" href="${(request.contextPath)!}/zone/"><i class="glyphicon glyphicon-book"></i>文&emsp;章</a></li>
+              <li><a class="pjax" href="${(request.contextPath)!}/zone/trash"><i class="glyphicon glyphicon-trash"></i>回收站</a></li>
+              <li><a class="pjax" href="${(request.contextPath)!}/zone/notice"><i class="glyphicon glyphicon-bell"></i>消&emsp;息</a></li>
+              <li><a href="${(request.contextPath)!}/zone/setting"><i class="glyphicon glyphicon-cog"></i>设&emsp;置</a></li>
+            </ul>
+        </section>
+    </div>
+    <div class="content" id="pjax-container">
+      ${ctitle!''}
+      ${content!}
+      ${pagination!}
+    </div>
+  </div>
+  <#include "common/footer.html"/>
+</section>
+<#include "common/javascript.html"/>
+<script type='text/javascript' src='${(request.contextPath)!}/static/f/js/qt-opt.js?ver=5.3'></script>
+</body>
+</html>

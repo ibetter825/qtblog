@@ -1,0 +1,60 @@
+<div class="chart-container" style="position: fixed; bottom: 1px; right: 1px; z-index: 103;">
+      <div class="widget widget-tabs blue" style="margin-bottom:0;">
+           <div class="widget-title">
+               <h4><i class="icon-comments-alt"></i>聊天</h4>
+				<span class="tools" style="display:none;">
+					<a href="javascript:;" class="icon-chevron-up" id="chat_dialog_tool"></a>
+				</span>
+           </div>
+           <div id="chat_container" class="widget-body" style="display: none; width:600px;">
+           		<div class="row-fluid">
+           			<div class="tabbable ">
+                         <ul class="nav nav-tabs" style="margin-right: 0;">
+                             <li class="element" data-placement="top" data-toggle="tooltip" data-original-title="讨论组"><a href="#chat_group" data-toggle="tab"><i class="icon-group"></i></a></li>
+                             <li class="element active" data-placement="top" data-toggle="tooltip" data-original-title="联系人"><a href="#chat_contact" data-toggle="tab"><i class="icon-user"></i></a></li>
+                         </ul>
+                         <div class="tab-content">
+                             <div class="tab-pane active" id="chat_contact">
+                                 <div class="row-fluid">
+					           		<div class="span10">
+					           			<div id="chat_content_container">
+							           		<div class="timeline-messages span12" id="chat_content_all"></div>
+							           </div>
+							       </div>
+							       <div class="span2">
+							       		<div style="height: 400px; overflow: auto; background:#F5F5F5;">
+								       		<div class="chat-profile text-center">
+												<span><img class="user-avatar" src="http://52nan3.com:80/upload/image/avatar/default.gif" alt="${(user.real_name)!''}"></span>
+												<p><span>${(user.real_name)!''}</span></p>
+											</div>
+								       		<ul class="nav nav-list faq-list" id="online_users">
+								       			
+								       		</ul>
+								       	</div>
+							       </div>
+							   </div>
+                             </div>
+                             <div class="tab-pane" id="chat_group">
+                                 
+                             </div>
+                         </div>
+                     </div>
+			   </div>
+			   <div class="row-fluid">
+			   		<form action="" onsubmit="return commit();">
+				       <div class="span12">
+				           <div class="chat-form">
+				               <div class="input-cont">
+				                   <input type="text" id="commit-content" autocomplete="off" placeholder="Type a message here...">
+				               </div>
+				               <div class="btn-cont">
+				                   <button  type="button" onclick="commit();" class="btn btn-primary">发送</button>
+				                   <a href="javascript:toggleChatDialog();" class="btn btn-danger">关闭</a>
+				               </div>
+				           </div>
+				       </div>
+			        </form>
+		       </div>
+	       </div>
+	   </div>
+   </div>

@@ -1,0 +1,12 @@
+<header class="header">
+    <div class="logo"><a href="/" title="云间叙"><img src="${(request.contextPath)!}/static/f/images/logo1.png" alt="云间叙"></a></div>
+    <ul class="nav">
+    	${navs!}
+    </ul>
+    <form method="get" class="search-form" action="${(request.contextPath)!}/search" onsubmit="return $.OP.sc(this);">
+      <input class="form-control" name="s" type="text" placeholder="输入关键字" value="">
+      <input class="btn" type="submit" value="搜索">
+    </form>
+    <div class="log log-info"></div>
+  </header>
+  <div class="ms-bar"><a href="/" title="云间叙"><img src="${(request.contextPath)!}/static/f/images/logo1.png" align="left"/></a><i class="glyphicon glyphicon-align-justify" onclick="$.OP.ms();"></i></div>

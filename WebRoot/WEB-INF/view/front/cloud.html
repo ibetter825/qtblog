@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#assign title = "标签云"/>
+<#include "common/css.html"/>
+<style type="text/css">
+.cloud .content {margin-right:0;}
+</style>
+<meta name="keywords" content="3D打印, 全球第一, 摩托车, 潮科技"><!-- 关键词这个还要想个办法看怎样实现 -->
+<meta name="description" content="${(dto.article_summary)!}">
+</head>
+<body class="cloud uimo ui-c3">
+<section class="container">
+  <#include "common/header.html"/>
+  <div class="content-wrap">
+    <div class="content">
+        <h1 class="title"><strong>标签云</strong></h1>
+        <div id="content-main">
+			<ul class="tagslist">
+				${tags!}
+			</ul>
+		</div>
+		${pagination!}
+	</div>
+  </div>
+  <#include "common/footer.html"/>
+</section>
+<#include "common/javascript.html"/>
+</body>
+</html>

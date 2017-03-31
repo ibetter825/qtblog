@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>系统主页</title>
+   <#include "../../common/includes/base_header.html"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.min.css"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/css/dropzone.css">
+</head>
+<body style="background-color: #FFFFFF;">
+   <div class="container-fluid">
+   		<div class="space15"></div>
+        <a href="javascript:$('#my-dialog').modal('show');" role="button" class="btn btn-primary" data-toggle="modal">dialog</a><!-- href="#my-dialog" -->
+	    <a href="#my-alert" role="button" class="btn btn-danger" data-toggle="modal">alert</a>
+	    <a href="#my-confirm" role="button" class="btn btn-warning" data-toggle="modal">confirm</a>
+	    <a href="${(request.contextPath)!}${admin}/menu" role="button" class="btn btn-success" data-target="#my-success" data-toggle="modal">success</a><!-- href="#my-success"  -->
+	    
+	   <!-- modal dialogs -->
+	   <div id="my-dialog" class="modal hide fade" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="mymodallabel1" aria-hidden="true">
+	       <div class="modal-header">
+	           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	           <h3 id="mymodallabel1">modal header</h3>
+	       </div>
+	       <div class="modal-body">
+	           <p>body goes here...</p>
+	       </div>
+	       <div class="modal-footer">
+	           <button class="btn" data-dismiss="modal" aria-hidden="true">close</button>
+	           <button class="btn btn-primary">save</button>
+	       </div>
+	   </div>
+	   
+	   <div id="my-alert" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="mymodallabel2" aria-hidden="true">
+	       <div class="modal-header">
+	           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	           <h3 id="mymodallabel2">alert header</h3>
+	       </div>
+	       <div class="modal-body">
+	           <p>body goes here...</p>
+	       </div>
+	       <div class="modal-footer">
+	           <button data-dismiss="modal" class="btn btn-primary">ok</button>
+	       </div>
+	   </div>
+	   <div id="my-confirm" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="mymodallabel3" aria-hidden="true">
+	       <div class="modal-header">
+	           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	           <h3 id="mymodallabel3">confirm header</h3>
+	       </div>
+	       <div class="modal-body">
+	           <p>body goes here...</p>
+	       </div>
+	       <div class="modal-footer">
+	           <button class="btn" data-dismiss="modal" aria-hidden="true">close</button>
+	           <button data-dismiss="modal" class="btn btn-primary">confirm</button>
+	       </div>
+	   </div>
+	   <div id="my-success" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="mymodallabel3" aria-hidden="true">
+	       <div class="modal-header">
+	           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	           <h3 id="mymodallabel4">success header</h3>
+	       </div>
+	       <div class="modal-body">
+	           <p>body goes here...</p>
+	       </div>
+	       <div class="modal-footer">
+	           <button class="btn" data-dismiss="modal" aria-hidden="true">close</button>
+	           <button data-dismiss="modal" class="btn btn-success">success</button>
+	       </div>
+	   </div>
+	   
+	   <form action="${(request.contextPath)!}${admin}/mq" method="post">
+	   		消息:<input type="text" name="msg"/>
+	   		<input type="submit" value="提交"/>
+	   </form>
+	   <!-- 上传文件 -->
+	   <form id="uploadForm" class="dropzone"></form>
+   </div>
+   
+   <#include "../../common/includes/base_javascript.html"/>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/others/dropzone.js"></script>
+   <script type="text/javascript">
+   		Dropzone.autoDiscover = false;
+		$("#uploadForm").dropzone({ 
+			url: '/upload?upload_type=avatar',
+			method: 'post',
+			maxFiles: 1,
+			addRemoveLinks: true,
+			init: function() {
+	            this.on("success", function(file) {
+	                alert("File " + file.name + "uploaded");
+	            });
+	            this.on("removedfile", function(file) {
+	                alert("File " + file.name + "removed");
+	            });
+	        }
+		}); 
+   </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+              	  <#if operates??>
+              	  <#if (operates?size>0)>
+              	   <div class="clearfix">
+                      <div class="btn-group">
+                      		<#list operates as opt>
+                      			<#if opt.opt_type == 'load'>
+	                            <a class="${opt.opt_class}" href="${(request.contextPath)!}${admin}/operate?mid=${opt.menu_no}&opt=${opt.opt_no}" role="button" data-target="${opt.opt_param!''}" data-toggle="modal">
+	                            		<i class="${opt.opt_icon!''}"></i>&nbsp;&nbsp;${opt.opt_name}
+	                            </a>
+	                            <#elseif opt.opt_type == 'javascript'>
+	                          	<span id="${opt.opt_no}" class="${opt.opt_class}" onclick="${opt.opt_url}" opt_param="${(request.contextPath)!}${admin}/operate?mid=${opt.menu_no}&opt=${opt.opt_no}">
+	                            		<i class="${opt.opt_icon!''}"></i>&nbsp;&nbsp;${opt.opt_name}
+	                            </span>
+	                            <#else>
+	                          	<a class="${opt.opt_class}" href="${(request.contextPath)!}${admin}/operate?mid=${opt.menu_no}&opt=${opt.opt_no}">
+	                            		<i class="${opt.opt_icon!''}"></i>&nbsp;&nbsp;${opt.opt_name}
+	                            </a>
+	                          </#if>
+                          </#list>
+                      </div>
+                  </div>
+                  <div class="space15"></div>
+                  </#if>
+                 </#if>
+                       
+   

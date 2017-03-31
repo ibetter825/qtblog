@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#assign title = "云间叙 - 似无言"/>
+<#include "front/common/css.html"/>
+<meta name="keywords" content="云间叙">
+<meta name="description" content="云间叙博客">
+</head>
+<body class="home blog uimo ui-c3">
+	<section class="container">
+		<#include "front/common/header.html"/>
+		<div class="content-wrap">
+			<div class="content" id="pjax-container">
+				<!-- <div class="ads ads-content">广告</div> -->
+				${home!}
+		    </div>
+		</div>
+		<aside class="sidebar">	
+			${motto!}
+			<div class="widget widget_searchbox">
+				<h3 class="title"><strong>搜索</strong></h3>
+				<form method="get" class="search-form" action="${(request.contextPath)!}/search" onsubmit="return $.OP.sc(this);">
+					<input class="form-control" name="s" type="text" placeholder="输入关键字" value=""><input class="btn" type="submit" value="搜索">
+				</form>
+			</div>
+			<div class="widget widget_postlist">
+				<h3 class="title"><strong>随机推荐</strong></h3>
+				<ul class="items-01">
+					${random!}
+				</ul>
+			</div>
+			<div class="widget widget_ads">
+				<div class="widget_ads_inner"><a href="/" target="_blank"><img src="${(request.contextPath)!}/static/f/images/yunjianxu.gif"></a></div>
+			</div>
+			<div class="widget widget_tags">
+				<h3 class="title"><strong>热门标签</strong></h3>
+				<ul class="widget_tags_inner">${htags!}</ul>
+			</div>
+		</aside>
+		<#include "front/common/footer.html"/>
+	</section>
+<#include "front/common/javascript.html"/>
+</body>
+</html>

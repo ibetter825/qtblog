@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=EDGE,IE=11,IE=10,IE=9,IE=8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+		<meta http-equiv="Cache-Control" content="no-transform">
+		<meta http-equiv="Cache-Control" content="no-siteapp">
+		<title>测试xss - 云间叙</title>
+		<meta name='robots' content='noindex,follow' />
+		<link rel='stylesheet' id='main-css'  href='/static/f/css/style.min.css?ver=1.0' type='text/css' media='all' />
+		<link rel='stylesheet' id='layer-css'  href='//cdn.bootcss.com/layer/2.4/skin/layer.css?ver=2.4' type='text/css' media='all' />
+		<link rel="shortcut icon" href="/static/f/images/favicon.ico">
+		<script>var _hmt = _hmt || [];(function() {var hm = document.createElement("script");hm.src = "https://hm.baidu.com/hm.js?28893ca8590279fc137e89c44242bee2";var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s);})();</script>
+		<!--[if lt IE 9]><script src="/static/f/js/html5.js"></script><![endif]--> 
+<meta name="keywords" content=""><!-- 关键词这个还要想个办法看怎样实现 -->
+<meta name="description" content="请输入内容...packagecom.owen.mybatis.sqlproviders;importorg.apache.ibatis.jdbc.SQL;publicclassTutorDynaSqlProvider{publicStringfindTuto">
+</head>
+<body class="detail uimo ui-c3">
+<section class="container">
+<header class="header">
+    <div class="logo"><a href="/" title="云间叙"><img src="/static/f/images/logo1.png" alt="云间叙"></a></div>
+    <ul class="nav">
+    	<li class="menu-item" data-title="首&emsp;页 - 云间叙"><a class="pjax" href="/"><span class="glyphicon glyphicon-home"></span> 首&emsp;页</a><i p="home"></i></li><li class="menu-item" data-title="新鲜事 - 云间叙"><a class="pjax" href="/news"><span class="glyphicon glyphicon-glass"></span> 新鲜事</a><i p="news"></i></li><li class="menu-item" data-title="潮科技 - 云间叙"><a class="pjax" href="/tech"><span class="glyphicon glyphicon-phone"></span> 潮科技</a><i p="tech"></i></li><li class="menu-item" data-title="生活汇 - 云间叙"><a class="pjax" href="/life"><span class="glyphicon glyphicon-fire"></span> 生活汇</a><i p="life"></i></li><li class="menu-item" data-title="有意思 - 云间叙"><a class="pjax" href="/funny"><span class="glyphicon glyphicon-gift"></span> 有意思</a><i p="funny"></i></li><li class="menu-item" data-title="更&emsp;多 - 云间叙"><a><span class="glyphicon glyphicon-list"></span> 更&emsp;多</a><ul class="sub-menu"><li class="menu-item" data-title="标签云 - 云间叙"><a class="pjax" href="/tag/cloud"><span class="glyphicon glyphicon-cloud"></span> 标签云</a><i p="cloud"></i></li><li class="menu-item" data-title="留言板 - 云间叙"><a class="pjax" href="/msg"><span class="glyphicon glyphicon-comment"></span> 留言板</a><i p="message"></i></li><li class="menu-item" data-title="网站地图 - 云间叙"><a class="pjax" href="/map"><span class="glyphicon glyphicon-globe"></span> 网站地图</a><i p="map"></i></li><li class="menu-item" data-title="友情链接 - 云间叙"><a class="pjax" href="/link"><span class="glyphicon glyphicon-link"></span> 友情链接</a><i p="link"></i></li></ul></li>
+    </ul>
+    <form method="get" class="search-form" action="/search" onsubmit="return $.OP.sc(this);">
+      <input class="form-control" name="s" type="text" placeholder="输入关键字" value="">
+      <input class="btn" type="submit" value="搜索">
+    </form>
+    <div class="log log-info"></div>
+  </header>
+  <div class="ms-bar"><a href="/" title="云间叙"><img src="/static/f/images/logo1.png" align="left"/></a><i class="glyphicon glyphicon-align-justify" onclick="$.OP.ms();"></i></div>  <div class="content-wrap">
+    <div class="content">
+    	<div class="content-main">
+	      <header class="article-header">
+	        <div class="breadcrumbs"><span class="text-muted">当前位置：</span><a href="/">主页</a> <small>></small> <a href="/diary">个人日记</a> <small>></small> <span class="text-muted">测试xss</span></div>
+	        <h1 class="article-title">测试xss</h1>
+	        <ul class="article-meta" id="article-meta">
+	          <!-- <li><a id="art-acc-name" href="/main/10000"></a> 发布于 <span>2016-12-03 14:56:30</span></li>
+	          <li>栏目：<a href="/diary" rel="category tag">个人日记</a></li> -->
+	        </ul>
+	      </header>
+	      <article class="article-content">
+	        <p>请输入内容...</p><pre><code class="java hljs"><span>package</span> com.owen.mybatis.sqlproviders;  
+<span>import</span> org.apache.ibatis.jdbc.SQL;  
+<span>public</span> <span><span>class</span> <span>TutorDynaSqlProvider</span>  
+</span>{  
+<span><span>public</span> String <span>findTutorByIdSql</span><span>(<span>int</span> tutorId)</span>  
+</span>{  
+<span>return</span> <span>"SELECT TUTOR_ID AS tutorId, NAME, EMAIL FROM TUTORS  
+WHERE TUTOR_ID="</span>+tutorId;  
+} }  </code></pre><p><br></p>
+	        	<div class="post-copyright" title="如涉及版权问题及其他疑问请联系：yunjianxu@163.com">版权声明：本文为博主原创文章，未经博主允许不得转载。</div>
+	      </article>
+	      <div class="article-social" id="article-social"></div>
+	      <div class="share-single">
+	        <div class="action-share bdsharebuttonbox"> 分享到： <a class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a> <a class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a> <a class="bds_weixin" data-cmd="weixin" title="分享到微信"></a> <a class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a> <a class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a> <a class="bds_bdhome" data-cmd="bdhome" title="分享到百度新首页"></a> <a class="bds_tqf" data-cmd="tqf" title="分享到腾讯朋友"></a><a class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a> <a class="bds_kaixin001" data-cmd="kaixin001" title="分享到开心网"></a> <a class="bds_taobao" data-cmd="taobao"></a> <a class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a> <a class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a> <a class="bds_twi" data-cmd="twi" title="分享到Twitter"></a> <a class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a> <a class="bds_copy" data-cmd="copy" title="分享到复制网址"></a> <a class="bds_more" data-cmd="more">更多</a>[<a class="bds_count" data-cmd="count" title="累计分享0次">0</a>]</div>
+	      </div>
+	      
+	      <nav class="article-nav">
+	       </nav>
+	      <!-- <div class="ads ads-content ads-related"></div> -->
+	      <div id="relate-rmd-container" class="relates relates-model-thumb">
+	        <h3 class="title"><strong>相关推荐</strong></h3>
+	        <input type="hidden" id="param-art-theme" value="diary"/>
+	        <ul id="relate-rmd"></ul>
+	      </div>
+	      <div class="sticky">
+	        <h3 class="title"><strong>热门推荐</strong></h3>
+	        <ul id="hot-rmd"></ul>
+	      </div>
+	      <!-- <div class="ads ads-content ads-comment"></div> -->
+	      <h3 class="title" id="comments">
+	        <div class="text-muted pull-right"> </div>
+	        <strong>评 论</strong> </h3>
+	      <div id="respond" class="no_webshot">
+	        <form action="/comt/add" method="post" id="commentform">
+	          <div class="comt-title">
+	            <div class="comt-avatar"> <img id="art-acc-avatar" class="avatar avatar-100" src="/static/f/images/default.jpg" height="100" width="100"> </div>
+	            <div class="comt-author"> </div>
+	            <a id="cancel-comment-reply-link" href="javascript:;">取消</a> </div>
+	          <div class="comt">
+	            <div class="comt-box">
+	              <textarea placeholder="输入评论..." class="input-block-level comt-area" name="content" id="comment" cols="100%" rows="3" tabindex="1" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('submit').click();return false};"></textarea>
+	              <div class="comt-ctrl">
+	                <div class="comt-tips">
+	                  <input type="hidden" name="post_art_no" value="6"/><!-- 被评论的文章 -->
+	                  <input type="hidden" name="post_type" id="post_type" value="1"/><!-- 类型：1 评论，2 回复 -->
+	                  <input type="hidden" name="post_to_acc" id="post_to_acc" value="10000"/><!-- 回复时使用,被回复的人 -->
+	                  <input type="hidden" name="post_comt_no" id="post_comt_no"/><!-- 回复时使用，被回复的评论 -->
+	                </div>
+	                <button type="submit" name="submit" id="submit" tabindex="5"><i class="icon-ok-circle icon-white icon12"></i> 提交评论</button>
+	                <span class="comt-tip">请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。</span>
+	                <!-- <span data-type="comment-insert-smilie" class="muted comt-smilie"><i class="icon-thumbs-up icon12"></i> 表情</span> --> 
+	              </div>
+	            </div>
+	          </div>
+	        </form>
+	      </div>
+	      <div id="postcomments">
+	        <ol class="commentlist" id="comment-list"></ol>
+	        <p class="more-comts"><a href="javascript:;" onclick="getComtsByAjax();">查看更多></a></p>
+	      </div>
+	    </div>
+    </div>
+  </div>
+<footer class="footer"> Copyright &copy; 2016 <a href="/">云间叙</a> &nbsp; <a href="mailto:yunjianxu@163.com">站务支持：yunjianxu@163.com</a> &nbsp; <a href="/map">网站地图</a> </footer></section>
+    <script type='text/javascript' src='//cdn.bootcss.com/jquery/2.1.3/jquery.min.js?ver=2.1.3'></script> 
+	<script type='text/javascript' src='//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js?ver=3.3.7'></script>
+	<script type='text/javascript' src='//cdn.bootcss.com/layer/2.4/layer.min.js?ver=2.4'></script>
+	<script>
+		window.jui = {
+			uri: '',
+			roll: '2 5',
+			ajaxpager: '1'
+		}
+	</script>
+	<script type='text/javascript' src='/static/f/js/custom.min.js?ver=1.0'></script> 
+<script type='text/javascript' src='/static/f/js/qt-opt.min.js?ver=5.3'></script>
+<script type="text/javascript">
+	var artno = '6';
+	var toacc = '10000';
+</script>
+<script type='text/javascript' src='/static/f/js/detail.min.js?ver=5.3'></script>
+<script>
+window._bd_share_config = {
+    common: {
+        "bdText": "测试xss",
+        "bdText":"一篇好文,推荐之-【"+$('.article-title').html()+"】（来自:云间叙）",
+        "bdPic": ""
+    },
+    share: [{
+        bdCustomStyle: jui.uri+"/static/f/css/share.css"
+    }]
+};with(document) 0[(getElementsByTagName("head")[0] || body).appendChild(createElement("script")).src = jui.uri+"/static/f/js/share.js?cdnversion=" + ~(-new Date() / 36e5)];
+</script>
+</body>
+</html>

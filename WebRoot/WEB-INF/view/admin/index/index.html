@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>MAPLE-LEAF</title>
+   <link rel="shortcut icon" href="${(request.contextPath)!}/static/a/image/favicon.ico">
+   <#include "../../common/includes/base_header.html"/>
+</head>
+<body class="fixed-top">
+   <div id="header" class="navbar navbar-inverse navbar-fixed-top">
+       <div class="navbar-inner">
+           <div class="container-fluid">
+               <div class="sidebar-toggle-box hidden-phone">
+                   <div class="icon-reorder tooltips" data-placement="right" data-original-title="隐藏或显示菜单栏"></div>
+               </div>
+               <a class="brand" href="${(request.contextPath)!}${admin}/index">
+                   <img src="${(request.contextPath)!}/static/a/image/logo.png" alt="Metro Lab" />
+               </a>
+               <a class="btn btn-navbar collapsed" id="main_menu_trigger" data-toggle="collapse" data-target=".nav-collapse">
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="arrow"></span>
+               </a>
+               <div id="top_menu" class="nav notify-row">
+                   <ul class="nav top-menu">
+                       <li class="dropdown">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                               <i class="icon-tasks"></i>
+                               <span class="badge badge-important">6</span>
+                           </a>
+                           <ul class="dropdown-menu extended tasks-bar">
+                               <li>
+                                   <p>你有6条任务</p>
+                               </li>
+                               <li>
+                                   <a href="#">
+                                       <div class="task-info">
+                                         <div class="desc">控制台</div>
+                                         <div class="percent">44%</div>
+                                       </div>
+                                       <div class="progress progress-striped active no-margin-bot">
+                                           <div class="bar" style="width: 44%;"></div>
+                                       </div>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#">
+                                       <div class="task-info">
+                                           <div class="desc">数据库更新</div>
+                                           <div class="percent">65%</div>
+                                       </div>
+                                       <div class="progress progress-striped progress-success active no-margin-bot">
+                                           <div class="bar" style="width: 65%;"></div>
+                                       </div>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#">
+                                       <div class="task-info">
+                                           <div class="desc">手机开发进度</div>
+                                           <div class="percent">87%</div>
+                                       </div>
+                                       <div class="progress progress-striped progress-info active no-margin-bot">
+                                           <div class="bar" style="width: 87%;"></div>
+                                       </div>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#">
+                                       <div class="task-info">
+                                           <div class="desc">手机App进度</div>
+                                           <div class="percent">33%</div>
+                                       </div>
+                                       <div class="progress progress-striped progress-warning active no-margin-bot">
+                                           <div class="bar" style="width: 33%;"></div>
+                                       </div>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#">
+                                       <div class="task-info">
+                                           <div class="desc">控制台</div>
+                                           <div class="percent">90%</div>
+                                       </div>
+                                       <div class="progress progress-striped progress-danger active no-margin-bot">
+                                           <div class="bar" style="width: 90%;"></div>
+                                       </div>
+                                   </a>
+                               </li>
+                               <li class="external">
+                                   <a href="#">查看所有任务</a>
+                               </li>
+                           </ul>
+                       </li>
+                       <li class="dropdown" id="header_inbox_bar">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                               <i class="icon-envelope-alt"></i>
+                               <span class="badge badge-important">5</span>
+                           </a>
+                           <ul class="dropdown-menu extended inbox">
+                               <li>
+                                   <p>你有5条消息</p>
+                               </li>
+                               <li>
+                                   <a href="#">
+                                       <span class="photo"><img src="${(request.contextPath)!}/static/a//image/avatar-mini.png" alt="avatar" /></span>
+									<span class="subject">
+									<span class="from">Jonathan Smith</span>
+									<span class="time">Just now</span>
+									</span>
+									<span class="message">
+									    Hello, 这是个消息列子.
+									</span>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#">
+                                       <span class="photo"><img src="${(request.contextPath)!}/static/a//image/avatar-mini.png" alt="avatar" /></span>
+									<span class="subject">
+									<span class="from">Jhon Doe</span>
+									<span class="time">10 mins</span>
+									</span>
+									<span class="message">
+									 Hi, 最近咋样?
+									</span>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#">
+                                       <span class="photo"><img src="${(request.contextPath)!}/static/a//image/avatar-mini.png" alt="avatar" /></span>
+									<span class="subject">
+									<span class="from">Jason Stathum</span>
+									<span class="time">3 hrs</span>
+									</span>
+									<span class="message">
+									    This is awesome dashboard.
+									</span>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#">
+                                       <span class="photo"><img src="${(request.contextPath)!}/static/a//image/avatar-mini.png" alt="avatar" /></span>
+									<span class="subject">
+									<span class="from">Jondi Rose</span>
+									<span class="time">Just now</span>
+									</span>
+									<span class="message">
+									    Hello, this is metrolab
+									</span>
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="#">See all messages</a>
+                               </li>
+                           </ul>
+                       </li>
+                       
+                       <li class="dropdown" id="header_notification_bar">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="未读系统通知">
+                               <i class="icon-bell-alt"></i>
+                               <span class="badge badge-warning unread-count">0</span>
+                           </a>
+                           <ul class="dropdown-menu extended notification unread-notice">
+                               <li>
+                                   <p>你有<span class="unread-count">0</span>条未读系统通知</p>
+                               </li>
+                           </ul>
+                       </li>
+                   </ul>
+               </div>
+               <div class="top-nav">
+                   <ul class="nav pull-right top-menu notify-row">
+                       <li class="dropdown mtop5">
+                           <a class="dropdown-toggle element" data-placement="bottom" data-toggle="tooltip" href="javascript:toggleChatDialog();" data-original-title="消息">
+                               <i class="icon-comments-alt"></i>
+                               <span class="badge badge-warning unread-msg" style="display:none;">0</span>
+                           </a>
+                       </li>
+                       <li class="dropdown mtop5">
+                           <a class="dropdown-toggle element" data-placement="bottom" data-toggle="tooltip" href="#" data-original-title="Help">
+                               <i class="icon-headphones"></i>
+                           </a>
+                       </li>
+                       <li class="dropdown">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                               <img class="user-avatar" src="${cxt!}/upload/image/avatar/default.gif" alt="" width="29" height="29">
+                               <span class="username">${(user.real_name)!''} - 超级管理员</span>
+                               <b class="caret"></b>
+                           </a>
+                           <ul class="dropdown-menu extended logout">
+                               <li><a href="${(request.contextPath)!}${admin}/user/profile" target="myFrame"><i class="icon-user"></i>我的资料</a></li>
+                               <li><a href="#"><i class="icon-cog"></i>我的设置</a></li>
+                               <li><a href="${(request.contextPath)!}${admin}/login/logout"><i class="icon-key"></i>退出</a></li>
+                           </ul>
+                       </li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+   </div>
+   
+   <div id="container" class="row-fluid">
+      <div class="sidebar-scroll">
+        <div id="sidebar" class="nav-collapse collapse">
+         <div class="navbar-inverse">
+            <form class="navbar-search visible-phone">
+               <input type="text" class="search-query" placeholder="Search" />
+            </form>
+         </div>
+          <ul class="sidebar-menu" id="my-menus">
+              <li class="sub-menu active">
+                  <a class="" href="${(request.contextPath)!}${admin}/desk" target="myFrame">
+                      <i class="icon-dashboard"></i>
+                      <span>控制台</span>
+                  </a>
+              </li>
+              <!-- <li class="sub-menu">
+                  <a href="javascript:;" class="">
+                      <i class="icon-book"></i>
+                      <span>UI 组件</span>
+                      <span class="arrow"></span>
+                  </a>
+                  <ul class="sub">
+                      <li><a class="" href="${cxt!}/general.html"><i class="icon-list-alt"></i>通用</a></li>
+                      <li><a class="" href="${cxt!}/button.html">按钮</a></li>
+                      <li><a class="" href="${cxt!}/slider.html">滑动</a></li>
+                      <li><a class="" href="${cxt!}/metro_view.html">Metro风格</a></li>
+                      <li><a class="" href="${cxt!}/tabs_accordion.html">Tab选项卡 & 手风琴</a></li>
+                      <li><a class="" href="${cxt!}/typography.html">文字排版</a></li>
+                      <li><a class="" href="${cxt!}/tree_view.html">树菜单</a></li>
+                      <li><a class="" href="${cxt!}/nestable.html">嵌套列表</a></li>
+                  </ul>
+              </li>
+              -->
+          </ul>
+      </div>
+   </div>
+   
+   <!-- 聊天框 -->
+   <!-- <#include "../../common/chat.html"/> -->
+   
+   <!-- 主要内容区域 -->
+   <div id="main-content">
+      <iframe name="myFrame" style="width:100%; height:100%; border:0;" src="${(request.contextPath)!}${admin}/desk"></iframe>
+   </div>
+   <div id="footer">
+       2016 &copy; YangTeng.
+   </div>
+   <script type="text/javascript">
+   	window.rute = {admin:'${admin}'}
+   </script>
+   <#include "../../common/includes/base_javascript.html"/>
+   <!-- <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/others/reconnecting-websocket.min.js"></script> -->
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/jquery.scrollto.min.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/local/admin.index.js"></script>
+   <script type="text/javascript">
+   /* $(function(){
+   		$(".chart-container").Tdrag({
+	        handle:".nav-tabs",
+	        recount:false
+	    });
+   }); */
+   /**
+	 * 设置节点属性
+	 */
+	function setFieldValue(selector,attr,val){
+		$(selector).attr(attr, val);
+	}
+   /* var user_no = '${(user.user_no)!""}', real_name = '${(user.real_name)!""}', user_avatar = '${(user.user_avatar)!""}', outin = 'in';
+   var websocket = null; */
+   </script>
+   <!-- <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/local/admin.websocket.js"></script> -->
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+	<link rel="shortcut icon" href="${(request.contextPath)!}/static/f/images/favicon.ico">
+	<title>云间叙 - 登录</title>
+	<link rel='stylesheet' id='main-css'  href='${(request.contextPath)!}/static/f/css/login.css?ver=1.0' type='text/css' media='all' />
+	<link rel='stylesheet' id='main-css'  href='${(request.contextPath)!}/static/f/plugins/layer/skin/layer.css?ver=2.4' type='text/css' media='all' />
+	<link rel="stylesheet" href="${(request.contextPath)!}/static/f/css/validation.css" type='text/css' media='all'/>
+</head>
+<body>
+	<div class="login-nav fix">
+		<ul class="f-r">${navs!}</ul>
+	</div>
+	<div class="login-banner"></div>
+	<ul class="login-switch">
+		<li class="login-switch-line"></li>
+		<li class="login-switch-title">
+			<span class="move-login title active">登录</span>
+			<span>·</span>
+			<span class="move-signup title">注册</span>
+		</li>
+	</ul>
+	<div class="login-box">
+		<div class="box-con tran">
+			<input type="hidden" id="redirectUrl" value="${redirectUrl!''}"/>
+			<form id="login-form" autocomplete="off">
+				<div class="login-con f-l">
+					<div class="form-group">
+						<input type="text" id="acc_str" name="acc_str" class="validate[required,maxSize[10],funcCall[checkAccount]]" placeholder="用户账号"/>
+					</div>
+					<div class="form-group">
+						<input type="text" id="acc_pwd" name="acc_pwd" class="validate[required,minSize[6],maxSize[18],funcCall[checkAccNo]]" placeholder="密码">
+					</div>
+					<div class="form-group">
+						<input type="text" id="captcha" name="captcha" class="validate[required,minSize[4],maxSize[4],custom[onlyLetterNumber]]" placeholder="验证码" data-prompt-position="centerRight:150,2">
+						<img title="点击切换验证码" id="captcha-img" src="${(request.contextPath)!}/captcha?${.now?long}" align="middle"/>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="tran pr">
+							<span class="tran">登录&emsp;<i class="glyphicon glyphicon-ok tran"></i></span>
+							<!-- <img class="loading" src="${(request.contextPath)!}/static/f/images/loading.gif"> -->
+						</button>
+					</div>
+					<div class="from-line"></div>
+					<div class="form-group ">
+						<input type="checkbox" name="remember" id="remember" value="1"/><label for="remember">记住密码</label>
+						<a href="javascript:;" class="move-reset">忘记密码？</a>
+					</div>
+					<div class="form-group">
+						<!-- <a href="javascript:;" class="move-other a-tag tran">使用第三方帐号登录<i class="glyphicon glyphicon-circle-arrow-right tran"></i></a> -->
+						<span class="other-label">使用第三方帐号登录:
+						</span><a href="#" class="other"><i class="weixin"></i>
+						</a><a href="#" class="other"><i class="qq"></i>
+						</a><a href="#" class="other"><i class="weibo"></i>
+						</a><a href="#" class="other"><i class="baidu"></i></a>
+					</div>
+				</div>
+			</form>
+			<!-- 登录 -->
+			<div class="signup f-l">
+				<div class="form-group">
+					<div class="signup-form">
+						<input type="text" placeholder="邮箱" class="email-mobile">
+						<a href="javascript:;" class="signup-select">手机注册</a>
+					</div>
+				</div>
+				<div class="signup-email">
+					<div class="form-group">
+						<input type="text" placeholder="您的名字">
+					</div>
+					<div class="form-group">
+						<input type="password" placeholder="密码（字母、数字，至少6位）">
+					</div>
+					<div class="form-group">
+						<button type="submit" class="tran pr">
+							<a href="javascript:reg();" class="tran">注册&emsp;<i class="glyphicon glyphicon-ok tran"></i></a>
+							<!-- <img class="loading" src="${(request.contextPath)!}/static/f/images/loading.gif"> -->
+						</button>
+					</div>
+					<p class="view-clause">点击注册，即同意我们的 <a href="javascript:;">用户隐私条款</a></p>
+				</div><!-- 邮箱注册 -->
+				<div class="signup-tel" style="display:none">
+					<div class="signup-form" id="message-inf" style="display:none">
+						<input type="text" placeholder="短信验证码" style="width:180px;">
+						<a href="javascript:;" class="reacquire">重新获取（59）</a>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="tran get-message pr">
+							<a href="javascript:;" class="tran">获取短信验证码</a>
+						</button>
+					</div>
+					<div class="form-group">
+						<!-- <a href="javascript:;" class="move-other a-tag tran">使用第三方帐号登录<i class="glyphicon glyphicon-circle-arrow-right tran"></i></a> -->
+						<span class="other-label">使用第三方帐号登录:
+						</span><a href="#" class="other"><i class="weixin"></i>
+						</a><a href="#" class="other"><i class="qq"></i>
+						</a><a href="#" class="other"><i class="weibo"></i>
+						</a><a href="#" class="other"><i class="baidu"></i></a>
+					</div>
+				</div><!-- 手机号码注册 -->
+			</div>
+			<!-- 注册 -->
+			<div class="mimachongzhi f-l">
+				<div class="form-group">
+					<input type="text" placeholder="请输入您的邮箱地址">
+					<span class="error-notic">邮箱格式不正确</span>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="tran pr">
+						<a href="javascript:;" class="tran">发送重置密码邮件</a>
+						<img class="loading" src="${(request.contextPath)!}/static/f/images/loading.gif">
+					</button>
+				</div>
+			</div>
+			<!-- 密码重置 -->
+			<div class="mobile-success f-l">
+				<p>手机号 <span>186****7580</span> 验证成功</p>
+				<p>请完善您的账号信息，您也可以<a href="#">绑定现有账号</a></p>
+				<div class="form-group">
+					<input type="text" placeholder="邮箱" class="email-mobile" onblur="verify.verifyEmail(this)"/>
+					<span class="error-notic">邮箱格式不正确</span>
+				</div>
+				<div class="form-group">
+					<input type="text" placeholder="您的名字">
+				</div>
+				<div class="form-group">
+					<input type="password" placeholder="密码（字母、数字，至少6位）" onblur="verify.PasswordLenght(this)"/>
+					<span class="error-notic">密码长度不够</span>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="tran pr">
+						<a href="javascript:;" class="tran">注册</a>
+						<!-- <img class="loading" src="${(request.contextPath)!}/static/f/images/loading.gif"> -->
+					</button>
+				</div>
+				<p class="view-clause">点击注册，即同意我们的 <a href="#">用户隐私条款</a></p>
+			</div>
+			<!-- 手机注册成功添补信息 -->
+		</div>
+	</div>
+	<div class="login-footer">
+		 &copy; 2016 <a href="http://51nan3.com">云间叙</a> &nbsp; <a href="http://demo.themebetter.com/xiu/sitemap.xml">网站地图</a> 
+	</div>
+	<script type='text/javascript' src='${(request.contextPath)!}/static/f/js/jquery.js?ver=1.0'></script>
+	<script type='text/javascript' src='${(request.contextPath)!}/static/f/plugins/layer/layer.js?ver=2.4'></script>
+	<script type="text/javascript">
+	var type = '${type!"login"}';
+	window.jui = {
+		uri: '${(request.contextPath)!}'
+	}
+	var _handle='';//储存电话是否填写正确
+	</script>
+	<script type="text/javascript" src="${(request.contextPath)!}/static/f/js/validation.js?ver=2.6.2"></script>
+	<script type="text/javascript" src="${(request.contextPath)!}/static/f/js/login.min.js?ver=1.1"></script>
+</body>
+</html>

@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>角色管理</title>
+   <#include "../../common/includes/base_header.html"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.min.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/validation/css/validationEngine.jquery.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/css/chosen.css"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/css/local/yt.css"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/js/ztree/css/zTreeStyle/zTreeStyle.css"/>
+</head>
+<body style="background-color: #FFFFFF;">
+   <div class="container-fluid">
+      <div class="row-fluid">
+      	<#include "../../common/includes/route.html"/>
+      </div>
+      <!-- SEARCH -->
+      <div class="row-fluid">
+      	<div class="span12">
+             <div class="widget blue">
+                 <div class="widget-title">
+                     <h4><i class="icon-search"></i> 查询条件</h4>
+                     <span class="tools">
+                         <a href="javascript:;" class="icon-chevron-down"></a>
+                     </span>
+                 </div>
+                 <div class="widget-body form">
+                     <form class="cmxform form-horizontal" id="search-form" method="post" onsubmit="return search();">
+						<div class="control-group">
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_role_no">角色编号:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_role_name" name="role.role_no[%]" type="text" />
+						    </div>
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_role_name">角色名称:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_role_name" name="role.role_name[%]" type="text" />
+						    </div>
+					    	<div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_role_state">角色状态:&nbsp;&nbsp;</label>
+					    		<select data-placeholder="选择角色状态" tabindex="2" id="searh_role_state" name="role.role_state[eq]">
+                                    <option value="">请选择...</option>
+                                    <option value="1">有效</option>
+                                    <option value="0">无效</option>
+                                </select>
+					    	</div>
+					    	<div class="input-container">
+					    		<button class="btn btn-primary" type="submit"><i class="icon-ok"></i>&nbsp;&nbsp;查询</button>
+                   				<button class="btn btn-warning" type="reset"><i class="icon-repeat"></i>&nbsp;&nbsp;重置</button>
+                   			</div>
+						</div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+      </div>
+      <!-- MAIN -->
+      <div class="row-fluid">
+          <div class="span12">
+              <div class="widget blue">
+                   <div class="widget-title">
+                       <h4><i class="icon-reorder"></i> 角色列表</h4>
+                           <span class="tools">
+                               <a href="javascript:;" class="icon-chevron-down"></a>
+                           </span>
+                   </div>
+                   <div class="widget-body">
+                   	   <#include "../../common/includes/toolbar.html"/>
+                       <table id="grid" class="table table-condensed table-hover table-striped">
+						    <thead>
+						        <tr>
+						            <th data-column-id="role_no" data-identifier="true">角色编号</th>
+						            <th data-column-id="role_name" data-sortable="false">角色名称</th>
+						            <th data-column-id="role_desc" data-sortable="false">角色描述</th>
+						            <th data-column-id="role_state" data-formatter="fRoleState">角色状态</th>
+						        </tr>
+						    </thead>
+					   </table>
+                   </div>
+               </div>
+          </div>
+      </div>
+   </div>
+   <!-- model add -->
+   <div id="model-form" class="modal hide fade widget blue" tabindex="-1" role="dialog" data-remote="" aria-labelledby="model-form-label" aria-hidden="true">
+       <div class="modal-header widget-title">
+           <h4 id="model-form-label"><i class="icon-plus"></i> 添加角色</h4>
+           <span class="tools">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+           </span>
+       </div>
+       <form class="cmxform form-horizontal" id="role-form" method="get" action="#">
+	       <div class="modal-body" style="max-height:500px;">
+	       	   <div class="row-fluid">
+		         <div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="role_no">角色编号:</label>
+				    </div>
+				    <div class="span6">
+					    <input class="input-block-level validate[required,maxSize[20],ajax[ajaxRoleNo]]" id="role_no" name="role.role_no" type="text"/>
+					    <input name="opt_type" type="hidden" value="add"/>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="role_name">角色名称:</label>
+				    </div>
+				    <div class="span6">
+				        <input class="input-block-level validate[required,maxSize[20]]" id="role_name" name="role.role_name" type="text"/>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="role_state">角色状态:</label>
+				    </div>
+				    <div class="span6">
+				    	<select class="input-block-level" id="role_state" name="role.role_state">
+			    			<option value="1">有效</option>
+			    			<option selected value="0">无效</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="role_desc">角色描述:</label>
+				    </div>
+				    <div class="span6">
+				    	<textarea class="input-block-level" id="role_desc" name="role.role_desc"></textarea>
+				    </div>
+				</div>
+		       </div>
+		     </div>
+	       <div class="modal-footer">
+	       	   <button class="btn btn-primary" type="submit">保存</button>
+	           <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">取消</button>
+	       </div>
+       </form>
+   </div>
+   <!-- model power -->
+   <div id="model-power" class="modal hide fade widget blue" tabindex="-1" role="dialog" data-remote="" aria-labelledby="model-form-label" aria-hidden="true">
+       <div class="modal-header widget-title">
+           <h4 id="model-power-label"><i class="icon-plus"></i> 分配权限</h4>
+           <span class="tools">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+           </span>
+       </div>
+       <div class="modal-body" style="max-height: 500px;">
+       	   <input type="hidden" id="power_role" value=""/>
+       	   <ul id="power-tree" class="ztree"></ul>
+	   </div>
+       <div class="modal-footer">
+       	   <button class="btn btn-primary" type="button" onclick="savePower();">保存</button>
+           <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">取消</button>
+       </div>
+   </div>
+   <#include "../../common/includes/base_javascript.html"/>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/lang/jquery.validationEngine-zh_CN.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/jquery.validationEngine.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/validationEngine-addition-rules.js"></script>
+   <!-- ztree树 -->
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/ztree/jquery.ztree.core.min.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/ztree/jquery.ztree.excheck.min.js"></script>
+   <!-- select加强版下拉框 -->
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/jquery.tagsinput.min.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/chosen.jquery.min.js"></script>
+   <script type="text/javascript">
+		"use strict";
+		var formObj = null, options = null, zTreePower = null;
+		function search(){
+	           var params = $('#search-form').serializeArray();
+	       	//grid.search(params);
+	       	$("#grid").bootgrid("search", params);
+	       	return false;
+	    }
+	    //弹出添加model
+	    function add(btn){
+	    	$('#model-form-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 添加');
+	    	$('input[name=role_type]').val('add');
+	    	$('#role_no').removeAttr('readonly').addClass('validate[required,maxSize[20],ajax[ajaxRoleNo]]');
+	    	$('#model-form').modal('show');
+	    }
+	    //弹出修改model
+	    function modify(btn){
+	    	var opt = $(btn).attr('opt_param');
+			var ids = $("#grid").bootgrid("getSelectedRows");
+			if(ids.length == 0 || ids.length > 1){
+				yt.alert("错误：请选择一条记录!");
+				return;
+			}
+	    	$('#model-form-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 修改');
+	    	$.post(opt,{role_no:ids.join(',')},function(data){
+			     var dto = data.data.dto;
+			     yt.fillForm($('#role-form'), dto);
+			},'json');
+			$('input[name=opt_type]').val('modify');
+			$('#role_no').prop('readonly','readonly').removeClass().addClass('input-block-level');
+	    	$('#model-form').modal('show');
+	    }
+	    //弹出删除confirm
+	    function del(btn){
+	    	var opt = $(btn).attr('opt_param');
+	    	var ids = $("#grid").bootgrid("getSelectedRows");
+	    	if(ids.length == 0){
+				yt.alert("错误：请至少选择一条记录!");
+				return;
+			}
+	    	yt.confirm('确认要删除这些角色吗?', function(){
+	    		$.post(opt, {ids:ids.join(',')}, function(data){
+				     yt.alert(data, function(){
+						search();
+					});
+				},'json');
+	    	});
+	    }
+			
+	    function power(btn){
+	    	var ids = $("#grid").bootgrid("getSelectedRows");
+	    	if(ids.length != 1){
+				yt.alert("错误：请选择一条记录!");
+				return;
+			}
+			$('#power_role').val(ids.join(','));
+	    	getPowerTree(ids.join(','));
+	    	$('#model-power-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 分配权限');
+		    $('#model-power').modal('show');
+	    }
+	    function myOnNodeCreated(event, treeId, treeNode) {
+	    	var clz = 'clear';
+		    if(treeNode.isLeaf)
+		    	clz = 'pull-left';
+		    $('#'+treeNode.tId).addClass(clz);
+		};
+	    function getPowerTree(role_no){
+	    	var setting = {
+	    			view: {
+						showLine: false
+					},
+					check: {
+						enable: true
+					},
+					callback: {
+						onNodeCreated: myOnNodeCreated
+					}
+				};
+	    	$.post("${(request.contextPath)!}${admin}/roleopt/power", {"role_no":role_no}, function(data){
+			     var power = data.data.power;
+				 zTreePower = $.fn.zTree.init($("#power-tree"), setting, power);
+			},'json');
+	    }
+	    //保存权限
+	    function savePower(){
+	    	var role_no = $('#power_role').val();
+	    	var nodes = zTreePower.getCheckedNodes(true);
+	    	var l = nodes.length, opts = [];
+	    	for(var i = 0; i < l; i++){
+	    		if(nodes[i].isLeaf)
+	    			opts.push(nodes[i].menu+'-'+nodes[i].id);
+	    	}
+	    	$.post($('#power').attr('opt_param'), {opts:opts.join(','),role:role_no}, function(data){
+	    		 $('#model-power').modal('hide');
+			     yt.alert(data);
+			},'json');
+	    }
+	    
+	    $(function () {
+		    $("#grid").bootgrid({
+			    ajax: true,
+			    url: "${(request.contextPath)!}${admin}/role/list",
+			    selection: true,
+			    multiSelect: true,
+			    rowSelect: true,
+			    keepSelection: false,
+			    formatters: {
+			        "fRoleState": function(column, row){
+			        	var state = Number(row.role_state);
+				    	if(state == 0)
+				    		return '<font color="#DC5D3A">无效</font>';
+				    	else if(state == 1)
+				    		return '<font color="#2FADE7">有效</font>';
+				    	else
+				    		return '<font color="#999999">未知</font>';
+			        }
+			    }
+			});
+			
+			//关闭Model后清空表单数据
+		   $('#model-form').on('hidden.bs.modal', function (e) {
+			  	$('#role-form')[0].reset();
+			  	$('#role-form').validationEngine('hideAll');
+			});
+			//美化滚动条
+			$(".modal-body").niceScroll({styler:"fb",cursorcolor:"#4A8BC2", cursorwidth: '8', cursorborderradius: '0px', background: '#404040', cursorborder: '', zindex: '1000'});
+		    
+			$.validationEngineLanguage.allRules.ajaxRoleNo = {
+					  'url': '${(request.contextPath)!}${admin}/role/vali', /* 验证程序地址 */
+		    	      'alertTextOk': '* 编号可以使用',
+		    	      'alertText': '* 角色编号已存在',
+		    	      'alertTextLoad': '* 正在验证,请稍等'
+	        };
+			// 校验插件初始化，注意校验只能初始化一遍（注意需要在全局设置之后进行初始化，这样全局设置才起作用）
+	        $("#role-form").validationEngine('attach', {
+				  promptPosition: 'bottomRight',
+				  maxErrorsPerField: 1,
+				  showOneMessage: true,
+				  prettySelect: true,
+				  onSuccess: false,
+				  ajaxFormValidation: true,
+				  ajaxFormValidationURL: '${(request.contextPath)!}${admin}/operate?mid=M9904&opt=save',
+				  ajaxFormValidationMethod: 'post',
+				  onAjaxFormComplete: function(status, form, json, options){
+						$('#model-form').modal('hide');
+					    yt.alert(json, function(){
+							search();
+						});
+			      }
+			});
+	        // 隐藏所有校验提示
+	        // $('#role-form').validationEngine('hideAll');
+		});
+   </script>
+</body>
+</html>

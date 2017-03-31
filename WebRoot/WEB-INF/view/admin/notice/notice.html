@@ -1,0 +1,199 @@
+﻿<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>系统通知</title>
+   <#include "../../common/includes/base_header.html"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.min.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/css/daterangepicker.css"/>
+</head>
+<body style="background-color: #FFFFFF;">
+   <div class="container-fluid">
+      <div class="row-fluid">
+      	<#include "../../common/includes/route.html"/>
+      </div>
+      <!-- SEARCH -->
+      <div class="row-fluid">
+      	<div class="span12">
+             <div class="widget blue">
+                 <div class="widget-title">
+                     <h4><i class="icon-search"></i> 查询条件</h4>
+                     <span class="tools">
+                         <a href="javascript:;" class="icon-chevron-down"></a>
+                     </span>
+                 </div>
+                 <div class="widget-body form">
+                     <form class="cmxform form-horizontal" id="search-form" method="post" onsubmit="return search();">
+						<div class="control-group">
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_notice_title">通知标题:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_notice_title" name="notice.notice_title[%]" type="text" />
+						    </div>
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_info_real_name">创建者:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_info_real_name" name="info.real_name[%]" type="text" />
+						    </div>
+						    <div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_start_time">开始日期:&nbsp;&nbsp;</label>
+						    	<input class="auto-bind-timepicker" id="searh_start_time" data-constraint="notice.add_time[>=]" type="text" autocomplete="off">
+						    </div>
+						    <div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_end_time">结束日期:&nbsp;&nbsp;</label>
+						    	<input class="auto-bind-timepicker" id="searh_end_time" data-constraint="notice.add_time[<]" type="text" autocomplete="off">
+						    </div>
+					    	<div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_notice_state">通知状态:&nbsp;&nbsp;</label>
+					    		<select data-placeholder="选择角色状态" tabindex="2" id="searh_notice_state" name="notice.notice_state[eq]">
+                                    <option value="">请选择...</option>
+                                    <option value="2">已发布</option>
+                                    <option value="1">已撤销</option>
+                                    <option value="0">待发布</option>
+                                </select>
+					    	</div>
+					    	<div class="input-container">
+					    		<button class="btn btn-primary" type="submit"><i class="icon-ok"></i>&nbsp;&nbsp;查询</button>
+                   				<button class="btn btn-warning" type="reset"><i class="icon-repeat"></i>&nbsp;&nbsp;重置</button>
+                   			</div>
+						</div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+      </div>
+      <!-- MAIN -->
+      <div class="row-fluid">
+          <div class="span12">
+              <div class="widget blue">
+                   <div class="widget-title">
+                       <h4><i class="icon-reorder"></i> 角色列表</h4>
+                           <span class="tools">
+                               <a href="javascript:;" class="icon-chevron-down"></a>
+                           </span>
+                   </div>
+                   <div class="widget-body">
+                   	   <#include "../../common/includes/toolbar.html"/>
+                       <table id="grid" class="table table-condensed table-hover table-striped">
+						    <thead>
+						        <tr>
+						            <th data-column-id="notice_id" data-identifier="true" data-visible="false" data-type="numeric">通知编号</th>
+						            <th data-column-id="notice_title" data-sortable="false">通知标题</th>
+						            <th data-column-id="notice_abstract" data-sortable="false">通知摘要</th>
+						            <th data-column-id="add_time" data-order="desc" data-formatter="fAddTime">添加时间</th>
+						            <th data-column-id="notice_type" data-formatter="fNoticeType">通知对象</th>
+						            <th data-column-id="notice_state" data-formatter="fNoticeState">通知状态</th>
+						            <th data-column-id="real_name">创建者</th>
+						            <th data-column-id="notice_level" data-formatter="fNoticeLevel">通知级别</th>
+						        </tr>
+						    </thead>
+					   </table>
+                   </div>
+               </div>
+          </div>
+      </div>
+   </div>
+   <#include "../../common/includes/base_javascript.html"/>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.js"></script>
+   <!-- 时间区间选择 -->
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/daterangepicker/moment.min.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/daterangepicker/daterangepicker.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/local/admin.sys.js"></script>
+   <script type="text/javascript">
+		"use strict";
+		var formObj = null, options = null, zTreePower = null;
+		function search(){
+	           var params = $('#search-form').serializeArray();
+	       	//grid.search(params);
+	       	$("#grid").bootgrid("search", params);
+	       	return false;
+	    }
+	    //弹出删除confirm
+	    function del(btn){
+	    	var opt = $(btn).attr('opt_param');
+	    	var ids = $("#grid").bootgrid("getSelectedRows");
+	    	if(ids.length == 0){
+				yt.alert("错误：请至少选择一条记录!");
+				return;
+			}
+	    	yt.confirm('确认要删除这些通知吗?', function(){
+	    		$.post(opt, {ids:ids.join(',')}, function(data){
+				     yt.alert(data, function(){
+						search();
+					});
+				},'json');
+	    	});
+	    }
+	    //修改l
+	    function add(btn){
+	    	var opt = $(btn).attr('opt_param');
+	    	location.href = opt + '&route=1';
+	    }
+		//修改l
+	    function modify(btn){
+	    	var opt = $(btn).attr('opt_param');
+			var ids = $("#grid").bootgrid("getSelectedRows");
+			if(ids.length == 0 || ids.length > 1){
+				yt.alert("错误：请选择一条记录!");
+				return;
+			}
+	    	location.href = opt + '&route=1&ids=' + ids.join(',');
+	    }
+	    function state(btn, val){
+	    	var opt = $(btn).attr('opt_param');
+			var ids = $("#grid").bootgrid("getSelectedRows");
+			if(ids.length == 0){
+				yt.alert("错误：请至少选择一条记录!");
+				return;
+			}
+	    	$.post(opt, {ids:ids.join(','), state:val}, function(data){
+			     yt.alert(data, function(){
+					search();
+				});
+			},'json');
+	    }
+	    $(function () {
+		    $("#grid").bootgrid({
+			    ajax: true,
+			    url: "${(request.contextPath)!}${admin}/notice/list",
+			    selection: true,
+			    multiSelect: true,
+			    rowSelect: true,
+			    keepSelection: false,
+			    formatters: {
+			        "fNoticeState": function(column, row){
+			        	var state = Number(row.notice_state);
+				    	if(state == 0)
+				    		return '<font color="#DC5D3A">待发布</font>';
+				    	else if(state == 1)
+				    		return '<font color="#FB9800">已撤销</font>';
+				    	else if(state == 2)
+				    		return '<font color="#2FADE7">已发布</font>';
+				    	else
+				    		return '<font color="#484848">未知状态</font>';
+			        },
+			        "fNoticeType": function(column, row){
+			        	var state = Number(row.notice_type);
+				    	if(state == 0)
+				    		return '<font color="#DC5D3A">所有用户</font>';
+				    	else if(state == 1)
+				    		return '<font color="#2FADE7">部分用户</font>';
+			        },
+			        "fNoticeLevel": function(column, row){
+			        	var state = Number(row.notice_level);
+				    	if(state == 0)
+				    		return '<font color="#2FADE7">普通</font>';
+				    	else if(state == 1)
+				    		return '<font color="#FB9800">高</font>';
+				    	else if(state == 2)
+				    		return '<font color="#DC5D3A">紧急</font>';
+			        },
+			        "fAddTime": function(column, row){
+			        	var time = Number(row.add_time);
+				    	return yt.formatDate(new Date(time), '-', true);
+			        }
+			    }
+			});
+		});
+   </script>
+</body>
+</html>

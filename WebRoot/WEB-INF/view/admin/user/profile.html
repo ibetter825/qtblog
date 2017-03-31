@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>用户管理</title>
+   <#include "../../common/includes/base_header.html"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/validation/css/validationEngine.jquery.css"/>
+</head>
+<body style="background-color: #FFFFFF;">
+   <div class="container-fluid">
+      <div class="row-fluid">
+           <div class="span12">
+               <ul class="breadcrumb">
+                   <li>
+                       <a href="#">主页</a>
+                       <span class="divider">/</span>
+                   </li>
+                   <li>
+                       <a href="#">我的资料</a>
+                   </li>
+               </ul>
+           </div>
+        </div>
+         <div class="row-fluid">
+             <div class="span12">
+                 <div class="widget box blue">
+                     <div class="widget-title">
+                         <h4>
+                             <i class="icon-reorder"></i> 
+                         </h4>
+	                    <span class="tools">
+	                       <a href="javascript:;" class="icon-chevron-down"></a>
+	                       <!-- <a href="javascript:;" class="icon-remove"></a> -->
+	                    </span>
+                     </div>
+                     <div class="widget-body">
+                    	   <div class="tabbable custom-tab tabs-left">
+                             <ul class="nav nav-tabs tabs-left">
+                                 <li class="active"><a href="#tab_3_1" data-toggle="tab"><i class="icon-info-sign"></i>&nbsp;基本资料</a></li>
+                                 <li class=""><a href="#tab_3_2" data-toggle="tab"><i class="icon-edit"></i>&nbsp;修改资料</a></li>
+                                 <li class=""><a href="#tab_3_3" data-toggle="tab"><i class="icon-magic"></i>&nbsp;修改头像</a></li>
+                                 <li class=""><a href="#tab_3_4" data-toggle="tab"><i class="icon-lock"></i>&nbsp;修改密码</a></li>
+                             </ul>
+                             <div class="tab-content">
+                                 <div class="tab-pane bio active" id="tab_3_1">
+                                 	<div class="row-fluid" style="height:500px;">
+	                                 	<div class="pull-left" style="border:1px solid #ccc; margin-right:20px;">
+	                                 		<img class="user-avatar" src="${(user.user_avatar)!''}" width="100" height="100" alt="">
+	                                 	</div>
+	                                 	<div class="pull-left">
+		                                     <h2>${(user.real_name)!''}</h2>
+			                                 <p><label>登录账号</label>: ${(user.user_name)!''}</p>
+			                                 <#if user.user_gender == 1>
+			                                 	<p><label>用户性别</label>: 男</p>
+			                                 <#else>
+			                                 	<p><label>用户性别</label>: 女</p>
+			                                 </#if>
+			                                 <p><label>用户电话</label>: ${(user.user_phone)!''}</p>
+			                                 <p><label>用户邮箱</label>: ${(user.user_email)!''}</p>
+			                                 <p><label>用户住址</label>: ${(user.user_address)!''}</p>
+			                                 <p><label>添加时间</label>: ${(user.add_time)!''}</p>
+			                                 <p><label>上次登录时间</label>: ${(user.last_login_time)!''}</p>
+			                             </div>
+			                         </div>
+                                 </div>
+                                 <div class="tab-pane" id="tab_3_2">
+                                     	<div class="row-fluid" style="height:500px;">
+								         	修改资料
+								         </div>
+                                 </div>
+                                 <div class="tab-pane" id="tab_3_3">
+                                     <div class="row-fluid" style="height:500px;">
+							         	<div id="altContent"></div>
+							         </div>
+                                 </div>
+                                 <div class="tab-pane" id="tab_3_4">
+                                     <div class="row-fluid" style="height:500px;">
+                                     		<form id="update-pwd-form" action="#" class="form-horizontal">
+												<div class="control-group">
+											    	<label class="control-label" for="user_name">输入旧密码:</label>
+											    	<div class="controls">
+												        <input class="input-xlarge validate[required,maxSize[20],custom[onlyLetterNumber],ajax[ajaxUserPwd]]" id="old_pwd" name="old_pwd" type="password" autocomplete="off"/>
+											        </div>
+												</div>
+												<div class="control-group">
+													<label class="control-label" for="real_name">输入新密码:</label>
+													<div class="controls">
+														<input class="input-xlarge validate[required,maxSize[20],custom[onlyLetterNumber]]" id="user_pwd" name="user_pwd" type="password" autocomplete="off"/>
+													</div>
+												</div>
+												<div class="control-group">
+													<label class="control-label" for="real_name">确认新密码:</label>
+													<div class="controls">
+														<input class="input-xlarge validate[required,maxSize[20],custom[onlyLetterNumber],equals[user_pwd]]" id="re_pwd" name="re_pwd" type="password" autocomplete="off"/>
+													</div>
+												</div>
+												<div class="form-actions" style="border-top:0;">
+				                                    <button class="btn btn-info" type="submit">保存</button>
+				                                    <button class="btn btn-danger" type="reset">取消</button>
+				                                </div>
+											</form>
+									 </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+   </div>
+   <#include "../../common/includes/base_javascript.html"/>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/lang/jquery.validationEngine-zh_CN.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/jquery.validationEngine.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/validationEngine-addition-rules.js"></script>
+   <script src="http://open.web.meitu.com/sources/xiuxiu.js" type="text/javascript"></script>
+   <script type="text/javascript">
+   		var user_no = '${(user.user_no)!""}';
+   		$(function(){
+   			$.validationEngineLanguage.allRules.ajaxUserPwd = {
+   					  'url': '${(request.contextPath)!}${admin}/user/valiPwd', /* 验证程序地址 */
+		    	      'alertTextOk': '* 旧密码验证正确',
+		    	      'alertText': '* 旧密码输入错误',
+		    	      'alertTextLoad': '* 正在验证,请稍等'
+	        };
+   			  $("#update-pwd-form").validationEngine('attach', {
+				  promptPosition: 'inline:4,0',
+				  maxErrorsPerField: 1,
+				  showOneMessage: true,
+				  onSuccess: false,
+				  ajaxFormValidation: true,
+				  ajaxFormValidationURL: '${(request.contextPath)!}${admin}/user/reset',
+				  ajaxFormValidationMethod: 'post',
+				  onAjaxFormComplete: function(status, form, json, options){
+				  		if(json.success){
+					    	yt.alert(json, function(){
+					    		$("#update-pwd-form")[0].reset();
+					    	});
+					    }else{
+					    	yt.alert(json);
+					    }
+			      }
+			 });
+   		
+   			  /*第1个参数是加载编辑器div容器，第2个参数是编辑器类型，第3个参数是div容器宽，第4个参数是div容器高*/
+			  xiuxiu.embedSWF("altContent",5,"100%","100%");
+			  //修改为您自己的图片上传接口
+			  xiuxiu.setUploadURL("${cxt!}/upload?upload_type=avatar");
+			  xiuxiu.setUploadType(2);
+			  xiuxiu.setUploadDataFieldName("file");
+			  xiuxiu.onInit = function (){
+			    	xiuxiu.loadPhoto("${cxt!}${(user.user_avatar)!''}");//修改为要处理的图片url
+			  };
+			  xiuxiu.onUploadResponse = function (data){
+			  		var res = JSON.parse(data);
+			  		if(res.success){
+			  			var path = res.data.path;
+			  			var url = '${(request.contextPath)!}${admin}/user/save';
+			  			var param = {'info.user_avatar':path,'opt_type':'modify'};
+			  			$.post(url,param,function(data){
+			  				if(data.success){
+			  					$('.user-avatar').attr('src', path);
+			  					parent.setFieldValue('.user-avatar', 'src', path);
+			  				}
+			  				yt.alert(data);
+			  			},'json');
+			  		}else
+			    		yt.alert(JSON.parse(data));
+			  };
+   		});
+   </script>
+</body>
+</html>

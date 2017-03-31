@@ -1,0 +1,170 @@
+﻿<link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/validation/css/validationEngine.jquery.css"/>
+<link rel="stylesheet" href="${(request.contextPath)!}/static/a/css/chosen.css"/>
+<div class="row-fluid">
+	<div class="control-group ">
+		<div class="span4">
+	    	<label class="control-label" for="menu_no">菜单编号:</label>
+	    </div>
+	    <div class="span6">
+	    	<#if type == "modify">
+	        	<input class="input-block-level" readonly="readonly" id="menu_no" name="menu.menu_no" type="text" value="${menu.menu_no!''}"/>
+		    <#else>
+		    	<input class="input-block-level validate[required,maxSize[10],custom[menuNo],ajax[ajaxMenuNo]]" id="menu_no" name="menu.menu_no" type="text"/>
+		    </#if>
+		    <input name="opt_type" type="hidden" value="${type}"/>
+	    </div>
+	</div>
+	<div class="control-group ">
+		<div class="span4">
+	    	<label class="control-label" for="menu_fno">父级菜单:</label>
+	    </div>
+	    <div class="span6">
+			<select class="input-block-level chzn-select" tabindex="1" id="menu_fno" name="menu.menu_fno">
+	        	<option value="">选择父级</option>
+			</select>
+	    </div>
+	</div>
+	<div class="control-group ">
+		<div class="span4">
+	    	<label class="control-label" for="menu_name">菜单名称:</label>
+	    </div>
+	    <div class="span6">
+	    	<#if type == "modify">
+	        	<input class="input-block-level validate[required,maxSize[20]]" id="menu_name" name="menu.menu_name" type="text" value="${menu.menu_name!''}"/>
+	        <#else>
+	        	<input class="input-block-level validate[required,maxSize[20]]" id="menu_name" name="menu.menu_name" type="text"/>
+	        </#if>
+	    </div>
+	</div>
+	<div class="control-group ">
+		<div class="span4">
+	    	<label class="control-label" for="menu_desc">菜单描述:</label>
+	    </div>
+	    <div class="span6">
+	    	<#if type == "modify">
+	    		<textarea class="input-block-level" id="menu_desc" name="menu.menu_desc">${menu.menu_desc!''}</textarea>
+	    	<#else>
+	    		<textarea class="input-block-level" id="menu_desc" name="menu.menu_desc"></textarea>
+	    	</#if>
+	    </div>
+	</div>
+	<div class="control-group ">
+		<div class="span4">
+	    	<label class="control-label" for="menu_seq">菜单排序:</label>
+	    </div>
+	    <div class="span6">
+	    	<#if type == "modify">
+	    		<input class="input-block-level validate[required,min[0],max[100]]" id="menu_seq" name="menu.menu_seq" type="number" value="${menu.menu_seq!0}"/>
+	    	<#else>
+	    		<input class="input-block-level validate[required,min[0],max[100]]" id="menu_seq" value="0" name="menu.menu_seq" type="number" />
+	    	</#if>
+	    </div>
+	</div>
+	<#if type == "modify">
+		<div class="control-group ">
+			<div class="span4">
+		    	<label class="control-label" for="menu_state">菜单状态:</label>
+		    </div>
+		    <div class="span6">
+		    	<select class="input-block-level" id="menu_state" name="menu.menu_state">
+		    		<#if menu.menu_state == 1>
+		    			<option selected value="1">有效</option>
+		    			<option value="0">无效</option>
+		    		<#else>
+						<option value="1">有效</option>
+		    			<option selected value="0">无效</option>
+		    		</#if>
+				</select>
+		    </div>
+		</div>
+	</#if>
+	<div class="control-group ">
+		<div class="span4">
+	    	<label class="control-label" for="menu_icon">菜单图标:</label>
+	    </div>
+	    <div class="span6">
+	        <#if type == "modify">
+	    		<input class="input-block-level " id="menu_icon" name="menu.menu_icon" type="text" value="${menu.menu_icon!''}"/>
+	    	<#else>
+	    		<input class="input-block-level " id="menu_icon" name="menu.menu_icon" type="text" />
+	    	</#if>
+	    </div>
+	</div>
+	<div class="control-group ">
+		<div class="span4">
+	    	<label class="control-label" for="menu_param">菜单参数:</label>
+	    </div>
+	    <div class="span6">
+	    	<#if type == "modify">
+	    		<input class="input-block-level " id="menu_param" name="menu.menu_param" type="text" value="${menu.menu_param!''}"/>
+	    	<#else>
+	    		<input class="input-block-level " id="menu_param" name="menu.menu_param" type="text" />
+	    	</#if>
+	    </div>
+	</div>
+</div>
+<script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/lang/jquery.validationEngine-zh_CN.js"></script>
+<script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/jquery.validationEngine.js"></script>
+<script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/validationEngine-addition-rules.js"></script>
+<!-- select加强版下拉框 -->
+<script type="text/javascript" src="${(request.contextPath)!}/js/jquery/jquery.tagsinput.min.js"></script>
+<script type="text/javascript" src="${(request.contextPath)!}/js/jquery/chosen.jquery.min.js"></script>
+<script type="text/javascript">
+	var loadObj = {};
+	var formObj, type = '${type}', menu_fno = '${menu_fno!""}';
+    loadObj.getMenuTree = function(){
+    	$.post("${(request.contextPath)!}${admin}/menu/tree", function(data){
+		     var menus = data.data.menus;
+		     var options = loadObj.getOptions(menus);
+		     $('#menu_fno').append(options).width(244);//244由于获取#menu_fno的outerWidth不准确手动设置值
+		     $("#menu_fno").chosen({
+				  no_results_text: "没有找到",
+				  search_contains: true
+			 });
+		},'json');
+    };
+    loadObj.getOptions = function(menus){
+    	var emsp = ['4','14','24','34'];
+    	var str = '';
+    	for(var i in menus){
+    		try{
+				if(menus[i].children.length > 0){
+					if(type === 'modify' && menus[i].id === menu_fno)
+						str += '<option selected value="'+menus[i].id+'" style="padding-left:'+emsp[menus[i].level]+'px; font-weight: bold;">'+menus[i].text+'</option>';
+					else
+						str += '<option value="'+menus[i].id+'" style="padding-left:'+emsp[menus[i].level]+'px; font-weight: bold;">'+menus[i].text+'</option>';
+					str += loadObj.getOptions(menus[i].children);
+				}else{
+					if(type === 'modify' && menus[i].id === menu_fno)
+						str += '<option selected value="'+menus[i].id+'" style="padding-left:'+emsp[menus[i].level]+'px;">'+menus[i].text+'</option>';
+					else
+						str += '<option value="'+menus[i].id+'" style="padding-left:'+emsp[menus[i].level]+'px;">'+menus[i].text+'</option>';
+				}
+			}catch(e){
+				continue;
+			}
+		}
+		return str;
+    };
+    $(function () {
+        //formObj = $.fn.bsgrid_form.init('menu-form', {});
+	 	// validationEngine校验全局设置，在表单验证结果为通过时的回调函数（不包括ajax校验）
+	    $.validationEngine.defaults.onSuccess = false;
+	    $.validationEngine.defaults.ajaxFormValidation = true;
+        $.validationEngine.defaults.ajaxFormValidationURL = '${(request.contextPath)!}${admin}/operate?mid=M9901&opt=save'; // 校验提交地址，此处的地址不必和checkAccountUnique rules的地址一样，因为接受参数的方式不一样，但需要返回的一样的json值
+        $.validationEngine.defaults.ajaxFormValidationMethod = 'post'; // 设置 Ajax 提交时，发送数据的方式
+        $.validationEngine.defaults.onAjaxFormComplete = function(status, form, json, options){
+			$('#model-menu').modal('hide');
+		    yt.alert(json, function(){
+				search();
+			});
+        };
+	    // 校验插件初始化，注意校验只能初始化一遍（注意需要在全局设置之后进行初始化，这样全局设置才起作用）
+        $("#menu-form").validationEngine('attach', {
+			  promptPosition: 'bottomRight'
+		});
+        // 隐藏所有校验提示
+        // $('#menu-form').validationEngine('hideAll');
+        loadObj.getMenuTree();
+    });
+</script>

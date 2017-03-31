@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>推荐内容管理</title>
+   <#include "../../common/includes/base_header.html"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.min.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/css/bootstrap-toggle-buttons.css" />
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/validation/css/validationEngine.jquery.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/css/chosen.css"/>
+   <link rel="stylesheet" type="text/css" href="/static/a/css/dropzone.css">
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/css/local/yt.css"/>
+   <style type="text/css">
+   	#uploadForm .dz-preview {width:100%; margin:0;}
+   	#uploadForm .dz-image {width:100%;}
+   	#uploadForm .dz-image img {margin:0 auto;}
+   	.order-icon {cursor:pointer; margin-left:10px;}
+   </style>
+</head>
+<body style="background-color: #FFFFFF;">
+   <div class="container-fluid">
+      <div class="row-fluid">
+      	<#include "../../common/includes/route.html"/>
+      </div>
+      <!-- SEARCH -->
+      <div class="row-fluid">
+      	<div class="span12">
+             <div class="widget blue">
+                 <div class="widget-title">
+                     <h4><i class="icon-search"></i> 查询条件</h4>
+                     <span class="tools">
+                         <a href="javascript:;" class="icon-chevron-down"></a>
+                     </span>
+                 </div>
+                 <div class="widget-body form">
+                     <form class="cmxform form-horizontal" id="search-form" method="post" onsubmit="return search();">
+						<div class="control-group">
+					    	<div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_rmd_state">推荐内容状态:&nbsp;&nbsp;</label>
+					    		<select data-placeholder="选择推荐内容状态" tabindex="2" id="searh_rmd_state" name="rmd.rmd_state[eq]">
+                                    <option value="">请选择...</option>
+                                    <option value="0">无效</option>
+                                    <option value="1">有效</option>
+                                </select>
+					    	</div>
+					    	<div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_rmd_type">推荐内容类型:&nbsp;&nbsp;</label>
+					    		<select data-placeholder="选择推荐内容类型" tabindex="2" id="searh_rmd_type" name="rmd.rmd_type[eq]">
+                                    <option value="">请选择...</option>
+                                    <option value="1">文章</option>
+                                    <option value="2">新闻</option>
+                                </select>
+					    	</div>
+					    	<div class="input-container">
+					    		<button class="btn btn-primary" type="submit"><i class="icon-ok"></i>&nbsp;&nbsp;查询</button>
+                   				<button class="btn btn-warning" type="reset"><i class="icon-repeat"></i>&nbsp;&nbsp;重置</button>
+                   			</div>
+						</div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+      </div>
+      <!-- MAIN -->
+      <div class="row-fluid">
+          <div class="span12">
+              <div class="widget blue">
+                   <div class="widget-title">
+                       <h4><i class="icon-reorder"></i> 推荐内容列表</h4>
+                           <span class="tools">
+                               <a href="javascript:;" class="icon-chevron-down"></a>
+                           </span>
+                   </div>
+                   <div class="widget-body">
+                   	   <#include "../../common/includes/toolbar.html"/>
+                       <table id="grid" class="table table-condensed table-hover table-striped">
+						    <thead>
+						        <tr>
+						            <th data-column-id="rmd_no" data-identifier="true" data-visible="false">推荐编号</th>
+						            <th data-column-id="rmd_title">推荐标题</th>
+						            <th data-column-id="rmd_summary" data-sortable="false">推荐摘要</th>
+						            <th data-column-id="rmd_time" data-formatter="fRmdTime">推荐时间</th>
+						            <th data-column-id="rmd_state" data-formatter="fRmdState">推荐状态</th>
+						            <th data-column-id="rmd_type" data-formatter="fRmdType">推荐分类</th>
+						            <th data-column-id="rmd_seq" data-formatter="fRmdSeq" data-order="asc">推荐排序</th>
+						        </tr>
+						    </thead>
+					   </table>
+                   </div>
+               </div>
+          </div>
+      </div>
+      
+      <!-- model -->
+      <div id="model-rmd" class="modal hide fade widget blue" tabindex="-1" role="dialog" data-remote="" aria-labelledby="model-rmd-label" aria-hidden="true">
+       <div class="modal-header widget-title">
+           <h4 id="model-rmd-label"><i class="icon-plus"></i> 添加推荐</h4>
+           <span class="tools">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+           </span>
+       </div>
+       <form class="cmxform form-horizontal" id="rmd-form" method="get" action="#">
+	       <div class="modal-body" style="max-height:400px;">
+	       	   <div class="row-fluid">
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="rmd_title">推荐标题:</label>
+				    </div>
+				    <div class="span6">
+				        <input class="input-block-level validate[required,maxSize[50]]" id="rmd_title" name="rmd.rmd_title" type="text"/>
+				        <input name="opt_type" type="hidden" value="add"/>
+				        <input name="rmd.rmd_no" id="rmd_no" type="hidden" value=""/>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="rmd_summary">推荐摘要:</label>
+				    </div>
+				    <div class="span6">
+				    	<textarea class="input-block-level" id="rmd_summary" name="rmd.rmd_summary"></textarea>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="rmd_url">推荐链接:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level validate[required]" id="rmd_url" name="rmd.rmd_url" type="text"/>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="rmd_type">推荐分类:</label>
+				    </div>
+				    <div class="span6">
+				    	<select class="input-block-level" id="rmd_type" name="rmd.rmd_type">
+				    		<option selected value="hot">热门</option>
+				    		<option value="news">新鲜事</option>
+			    			<option value="tech">潮科技</option>
+			    			<option value="life">会生活</option>
+			    			<option value="funny">有意思</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="rmd_seq">推荐排序:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level validate[required,min[0],max[100]]" id="rmd_seq" value="0" name="rmd.rmd_seq" type="number" />
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="rmd_state">推荐状态:</label>
+				    </div>
+				    <div class="span6">
+				    	<select class="input-block-level" id="rmd_state" name="rmd.rmd_state">
+				    		<option selected value="1">有效</option>
+			    			<option value="0">无效</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group" title="图片尺寸：260 * 132">
+					<div class="span4">
+                   		<label class="control-label">推荐头图:</label>
+                   		<input class="input-block-level " id="rmd_img" name="rmd.rmd_img" type="hidden" />
+                   	</div>
+                   	<div class="span6">
+	                      <div id="uploadForm" class="dropzone" style="border:1px solid #ddd;"></div>
+                   </div>
+               </div>
+		       </div>
+		     </div>
+	       <div class="modal-footer">
+	       	   <button class="btn btn-primary" type="submit">保存</button>
+	           <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">取消</button>
+	       </div>
+       </form>
+   </div>
+   <div id="model-refresh-form" class="modal hide fade widget blue" tabindex="-1" role="dialog" data-remote="" aria-labelledby="model-refresh-form-label" aria-hidden="true">
+       <div class="modal-header widget-title">
+           <h4 id="model-refresh-form-label"><i class="icon-user-md"></i> 审核文章</h4>
+           <span class="tools">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+           </span>
+       </div>
+       <form class="cmxform form-horizontal" id="refresh-form">
+	       <div class="modal-body">
+	       	   <div class="row-fluid">
+		         <div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="article_state">审核结果:</label>
+				    </div>
+				    <div class="span6">
+						<select name="refresh_choose" id="refresh_choose">
+							<option selected value="hot">热门</option>
+				    		<option value="news">新鲜事</option>
+			    			<option value="tech">潮科技</option>
+			    			<option value="life">会生活</option>
+			    			<option value="funny">有意思</option>
+						</select>
+						<input name="art.article_no" id="article_no" type="hidden" value=""/>
+					    <input name="opt_type" type="hidden" value="modify"/>
+				    </div>
+				</div>
+		       </div>
+		     </div>
+	       <div class="modal-footer">
+	       	   <button class="btn btn-primary" type="button" onclick="refresh();">确定</button>
+	           <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">取消</button>
+	       </div>
+       </form>
+   
+   
+   <#include "../../common/includes/base_javascript.html"/>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/others/toastr.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/lang/jquery.validationEngine-zh_CN.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/jquery.validationEngine.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/validationEngine-addition-rules.js"></script>
+   <!-- select加强版下拉框 -->
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/jquery.tagsinput.min.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/chosen.jquery.min.js"></script>
+   <!-- 上传 -->
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/others/dropzone.js"></script>
+
+   <script type="text/javascript">
+		"use strict";
+		var formObj = null, uploadedFile = {};
+		function search(){
+	        var params = $('#search-form').serializeArray();
+	       	$("#grid").bootgrid("search", params);
+	       	return false;
+	    }
+		//弹出添加model
+	    function add(btn){
+	    	var ids = $("#grid").bootgrid("getSelectedRows");
+	    	$('#model-rmd-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 添加推荐');
+	    	$('input[name=opt_type]').val('add');
+	    	$('#model-rmd').modal('show');
+	    }
+		//弹出修改model
+	    function modify(btn){
+	    	var opt = $(btn).attr('opt_param');
+			var ids = $("#grid").bootgrid("getSelectedRows");
+			if(ids.length == 0 || ids.length > 1){
+				yt.alert("错误：请选择一条记录!");
+				return;
+			}
+	    	$('#model-rmd-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 修改推荐');
+	    	$.post(opt,{rmd_no:ids.join(',')},function(data){
+			     var rmd = data.data.rmd;
+			     initImg('${(request.contextPath)!}'+rmd.rmd_img);
+			     yt.fillForm($('#rmd-form'), rmd);
+			},'json');
+			$('input[name=opt_type]').val('modify');
+			$('#rmd_no').prop('readonly','readonly').removeClass().addClass('input-block-level');
+	    	$('#model-rmd').modal('show');
+	    }
+	    //弹出删除confirm
+	    function del(btn){
+	    	var opt = $(btn).attr('opt_param');
+	    	var ids = $("#grid").bootgrid("getSelectedRows");
+	    	if(ids.length == 0){
+				yt.alert("错误：请至少选择一条记录!");
+				return;
+			}
+	    	yt.confirm('确认要删除这些推荐内容吗?', function(){
+	    		$.post(opt, {ids:ids.join(',')}, function(data){
+				     yt.alert(data, function(){
+						search();
+					});
+				},'json');
+	    	});
+	    }
+	    
+	    function order(no, seq, dis){
+	    	$.post('${(request.contextPath)!}${admin}/rmd/save', {opt_type:'modify','rmd.rmd_seq':seq+dis,'rmd.rmd_no':no}, function(data){
+	    		if(data.success)
+    				search();
+    			else
+				    yt.alert(data);
+			},'json');
+	    }
+	    
+	    $("#grid").bootgrid({
+		    ajax: true,
+		    url: "${(request.contextPath)!}${admin}/rmd/list",
+		    selection: true,
+		    multiSelect: true,
+		    rowSelect: true,
+		    keepSelection: false,
+		    formatters: {
+		    	"fRmdTime": function(column, row){
+		        	var time = Number(row.rmd_time);
+			    	return yt.formatDate(new Date(time), '-', true);
+		        },
+		        "fRmdState": function(column, row){
+		        	var state = Number(row.rmd_state);
+		        	if(state == 0)
+		        		return '<span class="rmd_state" data-row-val="'+state+'" style="color:red">无效</span>';
+		        	else if(state == 1)
+		        		return '<span class="rmd_state" data-row-val="'+state+'" style="color:green">有效</span>';
+		        	else
+		        		return '<span class="rmd_state" data-row-val="'+state+'">未知</span>';
+		        },
+		        "fRmdType": function(column, row){
+		        	var type = row.rmd_type;
+		        	if(type === 'hot')
+		        		return '热门推荐';
+		        	else if(type === 'news')
+		        		return '新鲜事';
+		        	else if(type === 'tech')
+		        		return '潮科技';
+		        	else if(type === 'life')
+		        		return '会生活';
+		        	else if(type === 'funny')
+		        		return '有意思';
+		        },
+		        "fRmdSeq": function(column, row){
+		        	var seq = Number(row.rmd_seq);
+		        	var no = row.rmd_no;
+		        	if(seq <= 0)
+		        		return '<span>[ '+seq+' ]</span><span class="order-icon" title="上移"><i class="icon-chevron-up" style="color:#DDDDDD;"></i></span><span onclick="order(\''+no+'\','+seq+', 1);" title="下移" class="order-icon"><i class="icon-chevron-down" style="color:#22C0CB;"></i><span>';	
+		        	else
+		        		return '<span>[ '+seq+' ]</span><span onclick="order(\''+no+'\','+seq+', -1);"  class="order-icon" title="上移"><i class="icon-chevron-up" style="color:#2FADE7;"></i></span><span onclick="order(\''+no+'\','+seq+', 1);"  title="下移" class="order-icon"><i class="icon-chevron-down" style="color:#22C0CB;"></i><span>';		
+		        }
+		    }
+		});
+	    
+	  //关闭Model后清空表单数据
+	   $('#model-rmd').on('hidden.bs.modal', function (e) {
+		  	$('#rmd-form')[0].reset();
+		  	//$('.dz-preview').remove();
+		  	//$('.dz-message').show();
+		  	if(uploadedFile.name){
+			   uploadedFile['handle'] = 1;//表示模态框隐藏时移除文件，但不删除服务器的文件
+			   myDropzone.removeFile(uploadedFile);
+		   }
+		  	$('#rmd-form').validationEngine('hideAll');
+		});
+	  
+	 	// 校验插件初始化，注意校验只能初始化一遍（注意需要在全局设置之后进行初始化，这样全局设置才起作用）
+        $("#rmd-form").validationEngine('attach', {
+			  promptPosition: 'bottomRight',
+			  prettySelect: true,
+			  onSuccess: false,
+			  ajaxFormValidation: true,
+			  ajaxFormValidationURL: '${(request.contextPath)!}${admin}/operate?mid=M9803&opt=save',
+			  ajaxFormValidationMethod: 'post',
+			  onAjaxFormComplete: function(status, form, json, options){
+					$('#model-rmd').modal('hide');
+				    yt.alert(json, function(){
+						search();
+					});
+		      }
+		});
+      	//更新缓存
+		function refreshCache(){
+			$('#model-refresh-form').modal('show');
+		}
+      	function refresh(){
+      		var type = $('#refresh_choose').val(); 
+      		$.post('${(request.contextPath)!}${admin}/rmd/refresh/'+type,function(data){
+      			$('#model-refresh-form').modal('hide');
+				yt.alert(data);
+			},'json');
+      	}
+	    Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone("#uploadForm",{ 
+			url: '${(request.contextPath)!}/upload?upload_type=image',
+			method: 'post',
+			maxFiles: 1,
+			acceptedFiles: "image/*",
+			addRemoveLinks: true,
+			dictDefaultMessage: '<i class="icon-picture"></i>&nbsp;选择图片',
+			dictRemoveFile: '移除图片',
+			dictInvalidFileType:'请选择图片',
+			init: function() {
+	            this.on("success", function(file, data) {
+	            	uploadedFile = file;
+	            	yt.alert(data);
+	            	if(data.success){
+		            	var filepath = data.data.path;
+		            	$('#rmd_img').val(filepath);
+	            	}else{
+	            		if(uploadedFile.name){
+	         			   uploadedFile['handle'] = 1;//表示模态框隐藏时移除文件，但不删除服务器的文件
+	         			   myDropzone.removeFile(uploadedFile);
+	         		   }
+	            	}
+	            });
+	            this.on("removedfile", function(file) {
+	            	myDropzone.options.maxFiles = 1;
+	            	if(file.name === 'uploadedImg' || file.name === uploadedFile.name)
+	            		uploadedFile = {};
+	            	if(!file.handle){
+	            		var imgpath = $('#rmd_img').val();
+	            		$('#rmd_img').val('');
+	            		$.post('${(request.contextPath)!}${admin}/file/del',{path:imgpath});
+	            	}
+	            });
+	        }
+		}); 
+	  	//初始化dropzone图片
+		function initImg(uri){
+			var mockFile = { name: 'uploadedImg', accepted:true };
+			myDropzone.emit("addedfile", mockFile);
+			myDropzone.emit("thumbnail", mockFile, uri);
+			myDropzone.createThumbnailFromUrl(mockFile, uri);
+			myDropzone.emit("complete", mockFile);
+			myDropzone.options.maxFiles = 0;//myDropzone.options.maxFiles - 1;
+			uploadedFile = mockFile;
+		}
+   </script>
+</body>
+</html>

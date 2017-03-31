@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>操作管理</title>
+   <#include "../../common/includes/base_header.html"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.min.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/validation/css/validationEngine.jquery.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/css/chosen.css"/>
+   <link rel="stylesheet" type="text/css" href="${(request.contextPath)!}/static/a/css/local/yt.css"/>
+</head>
+<body style="background-color: #FFFFFF;">
+   <div class="container-fluid">
+      <div class="row-fluid">
+      	<#include "../../common/includes/route.html"/>
+      </div>
+      <!-- SEARCH -->
+      <div class="row-fluid">
+      	<div class="span12">
+             <div class="widget blue">
+                 <div class="widget-title">
+                     <h4><i class="icon-search"></i> 查询条件</h4>
+                     <span class="tools">
+                         <a href="javascript:;" class="icon-chevron-down"></a>
+                     </span>
+                 </div>
+                 <div class="widget-body form">
+                     <form class="cmxform form-horizontal" id="search-form" method="post" onsubmit="return search();">
+						<div class="control-group">
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_opt_no">操作编号:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_opt_name" name="opt.opt_no[%]" type="text" />
+						    </div>
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_opt_name">操作名称:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_opt_name" name="opt.opt_name[%]" type="text" />
+						    </div>
+						    <div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_opt_no">菜单编号:&nbsp;&nbsp;</label>
+					    		<input class="" id="searh_opt_fno" name="opt.menu_no[%]" type="text" />
+					    	</div>
+					    	<div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_opt_type">操作类型:&nbsp;&nbsp;</label>
+					    		<input class="" id="searh_opt_type" name="opt.opt_type[%]" type="text" />
+					    	</div>
+					    	<div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_opt_state">操作状态:&nbsp;&nbsp;</label>
+					    		<select data-placeholder="选择操作状态" tabindex="2" id="searh_opt_state" name="opt.opt_state[eq]">
+                                    <option value="">请选择...</option>
+                                    <option value="1">有效</option>
+                                    <option value="0">无效</option>
+                                </select>
+					    	</div>
+					    	<div class="input-container">
+					    		<button class="btn btn-primary" type="submit"><i class="icon-ok"></i>&nbsp;&nbsp;查询</button>
+                   				<button class="btn btn-warning" type="reset"><i class="icon-repeat"></i>&nbsp;&nbsp;重置</button>
+                   			</div>
+						</div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+      </div>
+      <!-- MAIN -->
+      <div class="row-fluid">
+          <div class="span12">
+              <div class="widget blue">
+                   <div class="widget-title">
+                       <h4><i class="icon-reorder"></i> 操作列表</h4>
+                           <span class="tools">
+                               <a href="javascript:;" class="icon-chevron-down"></a>
+                           </span>
+                   </div>
+                   <div class="widget-body">
+                   	   <#include "../../common/includes/toolbar.html"/>
+                       <table id="grid" class="table table-condensed table-hover table-striped">
+						    <thead>
+						        <tr>
+						        	<th data-column-id="opt_id" data-identifier="true" data-visible="false" data-type="numeric">操作序列</th>
+						            <th data-column-id="opt_no">操作编号</th>
+						            <th data-column-id="menu_no" data-order="asc">菜单编号</th>
+						            <th data-column-id="opt_name" data-sortable="false">操作名称</th>
+						            <th data-column-id="opt_type">操作类型</th>
+						            <th data-column-id="opt_url" data-sortable="false" data-formatter="fOptUrl">操作链接</th>
+						            <th data-column-id="opt_param" data-sortable="false">操作参数</th>
+						            <th data-column-id="opt_desc" data-sortable="false">操作描述</th>
+						            <th data-column-id="opt_state" data-formatter="fOptState">操作状态</th>
+						            <th data-column-id="opt_seq">操作排序</th>
+						            <th data-column-id="is_show" data-formatter="fIsShow">显示状态</th>
+						            <th data-column-id="opt_icon" data-sortable="false" data-formatter="fOptIcon">操作图标</th>
+						        </tr>
+						    </thead>
+					   </table>
+                   </div>
+               </div>
+          </div>
+      </div>
+   </div>
+   <!-- model -->
+   <div id="model-opt" class="modal hide fade widget blue" tabindex="-1" role="dialog" data-remote="" aria-labelledby="model-opt-label" aria-hidden="true">
+       <div class="modal-header widget-title">
+           <h4 id="model-opt-label"><i class="icon-plus"></i> 添加操作</h4>
+           <span class="tools">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+           </span>
+       </div>
+       <form class="cmxform form-horizontal" id="opt-form" method="get" action="#">
+	       <div class="modal-body" style="max-height:400px;">
+	       	   <div class="row-fluid">
+		         <div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="opt_no">操作编号:</label>
+				    </div>
+				    <div class="span6">
+					    <input class="input-block-level validate[required,maxSize[20]]" id="opt_no" name="opt.opt_no" type="text"/>
+					    <input id="opt_id" name="opt.opt_id" type="hidden" value=""/>
+					    <input name="opt_type" type="hidden" value="add"/>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="opt_name">操作名称:</label>
+				    </div>
+				    <div class="span6">
+				        <input class="input-block-level validate[required,maxSize[20]]" id="opt_name" name="opt.opt_name" type="text"/>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="menu_no">所属菜单:</label>
+				    </div>
+				    <div class="span6" style="position: relative;">
+						<select class="input-block-level chzn-select validate[required]" tabindex="1" id="menu_no" name="opt.menu_no">
+				        	<option value="">选择菜单</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="opt_type">操作类型:</label>
+				    </div>
+				    <div class="span6">
+				        <select class="input-block-level" id="opt_type" name="opt.opt_type">
+			    			<option value="javascript">javascript</option>
+			    			<option value="page">page</option>
+			    			<option value="forward">forward</option>
+			    			<option value="redirect">redirect</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="opt_url">操作链接:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level " id="opt_url" name="opt.opt_url" type="text" />
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="opt_param">操作参数:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level " id="opt_param" name="opt.opt_param" type="text" />
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="opt_seq">操作排序:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level validate[required,min[0],max[100]]" id="opt_seq" value="0" name="opt.opt_seq" type="number" />
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="opt_state">操作状态:</label>
+				    </div>
+				    <div class="span6">
+				    	<select class="input-block-level" id="opt_state" name="opt.opt_state">
+			    			<option selected value="1">有效</option>
+			    			<option value="0">无效</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="is_show">是否显示:</label>
+				    </div>
+				    <div class="span6">
+				    	<select class="input-block-level" id="is_show" name="opt.is_show">
+			    			<option value="1">是</option>
+			    			<option selected value="0">否</option>
+						</select>
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="opt_icon">操作图标:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level " id="opt_icon" name="opt.opt_icon" type="text" />
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="opt_class">按钮样式:</label>
+				    </div>
+				    <div class="span6">
+				    	<input class="input-block-level " id="opt_class" name="opt.opt_class" type="text" />
+				    </div>
+				</div>
+				<div class="control-group ">
+					<div class="span4">
+				    	<label class="control-label" for="opt_desc">操作描述:</label>
+				    </div>
+				    <div class="span6">
+				    	<textarea class="input-block-level" id="opt_desc" name="opt.opt_desc"></textarea>
+				    </div>
+				</div>
+		       </div>
+		     </div>
+	       <div class="modal-footer">
+	       	   <button class="btn btn-primary" type="submit">保存</button>
+	           <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">取消</button>
+	       </div>
+       </form>
+   </div>
+   <#include "../../common/includes/base_javascript.html"/>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/lang/jquery.validationEngine-zh_CN.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/jquery.validationEngine.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/validationEngine-addition-rules.js"></script>
+   <!-- select加强版下拉框 -->
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/jquery.tagsinput.min.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/jquery/chosen.jquery.min.js"></script>
+   <script type="text/javascript">
+		"use strict";
+		var formObj = null, options = null;
+		function search(){
+	           var params = $('#search-form').serializeArray();
+	       	//grid.search(params);
+	       	$("#grid").bootgrid("search", params);
+	       	return false;
+	    }
+	    //弹出添加model
+	    function add(btn){
+	    	$('#model-opt-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 添加操作');
+	    	$('input[name=opt_type]').val('add');
+	    	$('#model-opt').modal('show');
+	    }
+	    //弹出修改model
+	    function modify(btn){
+	    	var opt = $(btn).attr('opt_param');
+			var ids = $("#grid").bootgrid("getSelectedRows");
+			if(ids.length == 0 || ids.length > 1){
+				yt.alert("错误：请选择一条记录!");
+				return;
+			}
+	    	$('#model-opt-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 修改操作');
+	    	$.post(opt,{opt_id:ids.join(',')},function(data){
+			     var opt = data.data.opt;
+			     yt.fillForm($('#opt-form'), opt);
+			},'json');
+			$('input[name=opt_type]').val('modify');
+	    	$('#model-opt').modal('show');
+	    }
+	    //弹出复制model
+	    function copy(btn){
+	    	var opt = $(btn).attr('opt_param');
+			var ids = $("#grid").bootgrid("getSelectedRows");
+			if(ids.length == 0 || ids.length > 1){
+				yt.alert("错误：请选择一条记录!");
+				return;
+			}
+	    	$('#model-opt-label').html('<i class="'+$(btn).find('i').attr('class')+'"></i> 修改操作');
+	    	$.post(opt,{opt_id:ids.join(',')},function(data){
+			     var opt = data.data.opt;
+			     yt.fillForm($('#opt-form'), opt);
+			     $('#menu_no').find('option:first-child').prop('selected', true).end().trigger('liszt:updated');//select选择置空
+			     $('#opt_id').val('');
+			},'json');
+			$('input[name=opt_type]').val('add');
+	    	$('#model-opt').modal('show');
+	    }
+	    //弹出删除confirm
+	    function del(btn){
+	    	var opt = $(btn).attr('opt_param');
+	    	var ids = $("#grid").bootgrid("getSelectedRows");
+	    	if(ids.length == 0){
+				yt.alert("错误：请至少选择一条记录!");
+				return;
+			}
+	    	yt.confirm('确认要删除这些操作吗?', function(){
+	    		$.post(opt, {ids:ids.join(',')}, function(data){
+				     yt.alert(data, function(){
+						search();
+					});
+				},'json');
+	    	});
+	    }
+			
+	    function getMenuTree(){
+	    	if(options == null){
+		    	$.post("${(request.contextPath)!}${admin}/menu/tree", function(data){
+				     var menus = data.data.menus;
+				     options = getOptions(menus);
+				     $('#menu_no').append(options).width(244);//244由于获取#opt_fno的outerWidth不准确手动设置值
+				     $("#menu_no").chosen({
+						  no_results_text: "没有找到",
+						  prettySelect: true,
+						  search_contains: true
+					 });
+				},'json');
+			}
+	    };
+	    
+	    function getOptions(menus){
+	    	var emsp = ['4','14','24','34'];
+	    	var str = '';
+	    	var length = menus.length;
+			for(var i = 0; i < length; i++){
+				if(menus[i].children.length > 0){
+					str += '<option value="'+menus[i].id+'" style="padding-left:'+emsp[menus[i].level]+'px; font-weight: bold;">'+menus[i].name+'</option>';
+					str +=  getOptions(menus[i].children);
+				}else
+					str += '<option value="'+menus[i].id+'" style="padding-left:'+emsp[menus[i].level]+'px;">'+menus[i].name+'</option>';
+			}
+			return str;
+	    };
+	    
+	    $(function () {
+		    $("#grid").bootgrid({
+			    ajax: true,
+			    url: "${(request.contextPath)!}${admin}/opt/list",
+			    selection: true,
+			    multiSelect: true,
+			    rowSelect: true,
+			    keepSelection: false,
+			    rowCount: [10, 25, 50, 100, 200],
+			    formatters: {
+			        "fOptState": function(column, row){
+			        	var state = Number(row.opt_state);
+				    	if(state == 0)
+				    		return '<font color="#DC5D3A">无效</font>';
+				    	else if(state == 1)
+				    		return '<font color="#2FADE7">有效</font>';
+				    	else
+				    		return '<font color="#999999">未知</font>';
+			        },
+			        "fIsShow": function(column, row){
+			        	var state = Number(row.is_show);
+				    	if(state == 0)
+				    		return '<font color="#DC5D3A">隐藏</font>';
+				    	else if(state == 1)
+				    		return '<font color="#2FADE7">显示</font>';
+				    	else
+				    		return '<font color="#999999">未知</font>';
+			        },
+			        "fOptIcon": function(column, row){
+			        	if(!yt.isEmpty(row.opt_icon))
+			        		return '<span class="'+row.opt_class+' btn-mini"><i class="'+row.opt_icon+'"></i>&nbsp;&nbsp;'+row.opt_name+'</span>';
+			        	else
+			        		return '';
+			        },
+			        "fOptUrl": function(column, row){
+			        	return '<span title="'+row.opt_url+'">'+row.opt_url+'</span>';
+			        }
+			    }
+			});
+			
+			//关闭Model后清空表单数据
+		   $('#model-opt').on('hidden.bs.modal', function (e) {
+		   		$('#menu_no').find('option:first-child').prop('selected', true).end().trigger('liszt:updated');//select选择置空
+		   		$('#opt_id').val('');
+			  	$('#opt-form')[0].reset();
+			  	$('#opt-form').validationEngine('hideAll');
+			});
+			//美化滚动条
+			$(".modal-body").niceScroll({styler:"fb",cursorcolor:"#4A8BC2", cursorwidth: '8', cursorborderradius: '0px', background: '#404040', cursorborder: '', zindex: '1000'});
+		    // 校验插件初始化，注意校验只能初始化一遍（注意需要在全局设置之后进行初始化，这样全局设置才起作用）
+	        $("#opt-form").validationEngine('attach', {
+				  promptPosition: 'bottomRight',
+				  prettySelect: true,
+				  onSuccess: false,
+				  ajaxFormValidation: true,
+				  ajaxFormValidationURL: '${(request.contextPath)!}${admin}/operate?mid=M9903&opt=save',
+				  ajaxFormValidationMethod: 'post',
+				  onAjaxFormComplete: function(status, form, json, options){
+						$('#model-opt').modal('hide');
+					    yt.alert(json, function(){
+							search();
+						});
+			        }
+			});
+	        // 隐藏所有校验提示
+	        // $('#opt-form').validationEngine('hideAll');
+	        getMenuTree();//初始化下拉框
+		});
+   </script>
+</body>
+</html>

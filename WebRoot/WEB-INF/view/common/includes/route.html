@@ -1,0 +1,30 @@
+<div class="span12">
+             <ul class="breadcrumb">
+             	<li>
+                     <a href="#">主页</a>
+                     <span class="divider">/</span>
+                 </li>
+             	<#list breadcrumbs as bc>
+             		<#if bc_has_next>
+             			<li>
+	                     	<a href="#">${bc}</a>
+	                     	<span class="divider">/</span>
+	                 	</li>
+	                <#else>
+	                 	<li class="active">
+	                     	${bc}
+	                 	</li>
+             		</#if>
+				</#list>  
+                 <!-- <li class="pull-right search-wrap">
+                     <form action="http://www.js-css.cn/divcss${(request.contextPath)!}/admin/metro/search_result.html" class="hidden-phone">
+                         <div class="input-append search-input-area">
+                             <input class="" id="appendedinputbutton" type="text">
+                             <button class="btn" type="button"><i class="icon-search"></i> </button>
+                         </div>
+                     </form>
+                 </li> -->
+             </ul>
+             
+         </div>
+   

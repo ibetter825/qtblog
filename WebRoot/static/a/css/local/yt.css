@@ -1,0 +1,14 @@
+form {margin:0;}
+.bsgrid input[type="text"] {padding:2px 4px; margin-bottom:0;}
+.input-container{float:left; margin-right:10px; margin-bottom:6px;}
+.clear {clear:both; float:none;}
+.text-overflow {white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+.chat-profile {padding-top:4px;}
+.chat-profile img {border-radius: 50% !important; -webkit-border-radius: 50% !important; -o-border-radius: 50% !important; width: 65px; height: 65px;}
+.chat-profile p {padding-top:4px;}
+.chat-profile p a {color: #4c4442;}
+#chat_content_container .timeline-messages {height: 400px; overflow: auto; margin-left: 0px;}
+.unread-msg-target {position:absolute; top:2px; right:-8px;}
+#online_users {padding-left:10px; padding-right:10px;}
+#online_users li a {padding:3px 10px; margin-left:-10px; margin-right:-10px;}
+.btn-group+.btn-group {margin-left:0;}

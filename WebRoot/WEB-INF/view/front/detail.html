@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#assign title = "${(dto.article_title)!} - 云间叙"/>
+<#include "common/css.html"/>
+<meta name="keywords" content="${(dto.article_tags)!}"><!-- 关键词这个还要想个办法看怎样实现 -->
+<meta name="description" content="${(dto.article_summary)!}">
+</head>
+<body class="detail uimo ui-c3">
+<section class="container">
+  <#include "common/header.html"/>
+  <div class="content-wrap">
+    <div class="content">
+    	<div class="content-main">
+	      <header class="article-header">
+	        <div class="breadcrumbs"><span class="text-muted">当前位置：</span><a href="${(request.contextPath)!}/">主页</a> <small>></small> <a href="${(request.contextPath)!}/${(dto.dict_no)!'other'}">${(dto.dict_name)!'其他'}</a> <small>></small> <span class="text-muted">${(dto.article_title)!}</span></div>
+	        <h1 class="article-title">${(dto.article_title)!}</h1>
+	        <ul class="article-meta" id="article-meta">
+	          <!-- <li><a id="art-acc-name" href="${(request.contextPath)!}/main/${(dto.acc_no)!}"></a> 发布于 <span>${time!}</span></li>
+	          <li>栏目：<a href="${(request.contextPath)!}/${(dto.dict_no)!'other'}" rel="category tag">${(dto.dict_name)!'其他'}</a></li> -->
+	        </ul>
+	      </header>
+	      <article class="article-content">
+	        ${(dto.article_content)!}
+	        <#if dto.article_source == 0>
+	        	<div class="post-copyright" title="如涉及版权问题及其他疑问请联系：yunjianxu@163.com">版权声明：本文为博主原创文章，未经博主允许不得转载。</div>
+	        <#else>
+	        	<div class="post-copyright" title="如涉及版权问题及其他疑问请联系：yunjianxu@163.com">文章来源：<a href="${(dto.article_from)!}" target="_blank">${(dto.article_from)!}</a></div>
+	        </#if>
+	      </article>
+	      <div class="article-social" id="article-social"></div>
+	      <div class="share-single">
+	        <div class="action-share bdsharebuttonbox"> 分享到： <a class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a> <a class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a> <a class="bds_weixin" data-cmd="weixin" title="分享到微信"></a> <a class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a> <a class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a> <a class="bds_bdhome" data-cmd="bdhome" title="分享到百度新首页"></a> <a class="bds_tqf" data-cmd="tqf" title="分享到腾讯朋友"></a><a class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a> <a class="bds_kaixin001" data-cmd="kaixin001" title="分享到开心网"></a> <a class="bds_taobao" data-cmd="taobao"></a> <a class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a> <a class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a> <a class="bds_twi" data-cmd="twi" title="分享到Twitter"></a> <a class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a> <a class="bds_copy" data-cmd="copy" title="分享到复制网址"></a> <a class="bds_more" data-cmd="more">更多</a>[<a class="bds_count" data-cmd="count" title="累计分享0次">0</a>]</div>
+	      </div>
+	      ${tags!''}
+	      <nav class="article-nav">
+	      	<#if prev??>
+				<span class="article-nav-prev">上一篇<br>
+		        	<a href="${(request.contextPath)!}/article/detail/${prev.article_no}" rel="prev">${prev.article_title}</a>
+		        </span>
+		    </#if>
+		    <#if next??>
+		        <span class="article-nav-next">下一篇<br>
+		        	<a href="${(request.contextPath)!}/article/detail/${next.article_no}" rel="next">${next.article_title}</a>
+		       	</span>
+		    </#if>
+	       </nav>
+	      <!-- <div class="ads ads-content ads-related"></div> -->
+	      <div id="relate-rmd-container" class="relates relates-model-thumb">
+	        <h3 class="title"><strong>相关推荐</strong></h3>
+	        <input type="hidden" id="param-art-theme" value="${(dto.article_theme)!'other'}"/>
+	        <ul id="relate-rmd"></ul>
+	      </div>
+	      <div class="sticky">
+	        <h3 class="title"><strong>热门推荐</strong></h3>
+	        <ul id="hot-rmd"></ul>
+	      </div>
+	      <!-- <div class="ads ads-content ads-comment"></div> -->
+	      <h3 class="title" id="comments">
+	        <div class="text-muted pull-right"> </div>
+	        <strong>评 论</strong> </h3>
+	      <div id="respond" class="no_webshot">
+	        <form action="${(request.contextPath)!}/comt/add" method="post" id="commentform">
+	          <div class="comt-title">
+	            <div class="comt-avatar"> <img id="art-acc-avatar" class="avatar avatar-100" src="${(request.contextPath)!}/static/f/images/default.jpg" height="100" width="100"> </div>
+	            <div class="comt-author"> </div>
+	            <a id="cancel-comment-reply-link" href="javascript:;">取消</a> </div>
+	          <div class="comt">
+	            <div class="comt-box">
+	              <textarea placeholder="输入评论..." class="input-block-level comt-area" name="content" id="comment" cols="100%" rows="3" tabindex="1" onkeydown="if(event.ctrlKey&amp;&amp;event.keyCode==13){document.getElementById('submit').click();return false};"></textarea>
+	              <div class="comt-ctrl">
+	                <div class="comt-tips">
+	                  <input type="hidden" name="post_art_no" value="${(dto.article_no)!}"/><!-- 被评论的文章 -->
+	                  <input type="hidden" name="post_type" id="post_type" value="1"/><!-- 类型：1 评论，2 回复 -->
+	                  <input type="hidden" name="post_to_acc" id="post_to_acc" value="${(dto.acc_no)!}"/><!-- 回复时使用,被回复的人 -->
+	                  <input type="hidden" name="post_comt_no" id="post_comt_no"/><!-- 回复时使用，被回复的评论 -->
+	                </div>
+	                <button type="submit" name="submit" id="submit" tabindex="5"><i class="icon-ok-circle icon-white icon12"></i> 提交评论</button>
+	                <span class="comt-tip">请自觉遵守互联网相关的政策法规，严禁发布色情、暴力、反动的言论。</span>
+	                <!-- <span data-type="comment-insert-smilie" class="muted comt-smilie"><i class="icon-thumbs-up icon12"></i> 表情</span> --> 
+	              </div>
+	            </div>
+	          </div>
+	        </form>
+	      </div>
+	      <div id="postcomments">
+	        <ol class="commentlist" id="comment-list"></ol>
+	        <p class="more-comts"><a href="javascript:;" onclick="getComtsByAjax();">查看更多></a></p>
+	      </div>
+	    </div>
+    </div>
+  </div>
+  <#include "common/footer.html"/>
+</section>
+<#include "common/javascript.html"/>
+<script type='text/javascript' src='${(request.contextPath)!}/static/f/js/qt-opt.min.js?ver=5.3'></script>
+<script type="text/javascript">
+	var artno = '${(dto.article_no)!}';
+	var toacc = '${(dto.acc_no)!}';
+</script>
+<script type='text/javascript' src='${(request.contextPath)!}/static/f/js/detail.min.js?ver=5.3'></script>
+<script>
+window._bd_share_config = {
+    common: {
+        "bdText": "${(dto.article_title)!}",
+        "bdText":"一篇好文,推荐之-【"+$('.article-title').html()+"】（来自:云间叙）",
+        "bdPic": "${img!}"
+    },
+    share: [{
+        bdCustomStyle: jui.uri+"/static/f/css/share.css"
+    }]
+};with(document) 0[(getElementsByTagName("head")[0] || body).appendChild(createElement("script")).src = jui.uri+"/static/f/js/share.js?cdnversion=" + ~(-new Date() / 36e5)];
+</script>
+</body>
+</html>

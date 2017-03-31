@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>操作日志</title>
+   <#include "../../common/includes/base_header.html"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.min.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/validation/css/validationEngine.jquery.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/css/chosen.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/css/daterangepicker.css"/>
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/ztree/css/zTreeStyle/zTreeStyle.css"/>
+</head>
+<body style="background-color: #FFFFFF;">
+   <div class="container-fluid">
+      <div class="row-fluid">
+      	<#include "../../common/includes/route.html"/>
+      </div>
+      <!-- SEARCH -->
+      <div class="row-fluid">
+      	<div class="span12">
+             <div class="widget blue">
+                 <div class="widget-title">
+                     <h4><i class="icon-search"></i> 查询条件</h4>
+                     <span class="tools">
+                         <a href="javascript:;" class="icon-chevron-down"></a>
+                     </span>
+                 </div>
+                 <div class="widget-body form">
+                     <form class="cmxform form-horizontal" id="search-form" method="post" onsubmit="return search();">
+						<div class="control-group">
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_user_name">用户名称:&nbsp;&nbsp;</label>
+						    	<input class="" id="searh_user_name" name="user.user_name[%]" type="text" />
+						    </div>
+							<div class="input-container">
+						    	<label class="control-label" style="width:auto;" for="searh_log_start_time">开始日期:&nbsp;&nbsp;</label>
+						    	<input class="auto-bind-timepicker" id="searh_log_start_time" data-constraint="log.log_time[>=]" type="text" />
+						    </div>
+					    	<div class="input-container">
+					    		<label class="control-label" style="width:auto;" for="searh_log_end_time">结束日期:&nbsp;&nbsp;</label>
+					    		<input class="auto-bind-timepicker" id="searh_log_end_time" data-constraint="log.log_time[<]" type="text" />
+					    	</div>
+					    	<div class="input-container">
+					    		<button class="btn btn-primary" type="submit"><i class="icon-ok"></i>&nbsp;&nbsp;查询</button>
+                   				<button class="btn btn-warning" type="reset"><i class="icon-repeat"></i>&nbsp;&nbsp;重置</button>
+                   			</div>
+						</div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+      </div>
+      <!-- MAIN -->
+      <div class="row-fluid">
+          <div class="span12">
+              <div class="widget blue">
+                   <div class="widget-title">
+                       <h4><i class="icon-reorder"></i> 操作记录</h4>
+                           <span class="tools">
+                               <a href="javascript:;" class="icon-chevron-down"></a>
+                           </span>
+                   </div>
+                   <div class="widget-body">
+                   	   <#include "../../common/includes/toolbar.html"/>
+                       <table id="grid" class="table table-condensed table-hover table-striped">
+						    <thead>
+						        <tr>
+						            <th data-column-id="user.user_name" data-formatter="fUserName">操作用户</th>
+						            <th data-column-id="log_desc" data-sortable="false">操作内容</th>
+						            <th data-column-id="log_uri" data-sortable="false" data-formatter="fLogParams">操作链接</th>
+						            <th data-column-id="log_ip" data-sortable="false">IP地址</th>
+						            <th data-column-id="log.log_time" data-order="desc" data-formatter="fLogTime">操作时间</th>
+						        </tr>
+						    </thead>
+					   </table>
+                   </div>
+               </div>
+          </div>
+      </div>
+   </div>
+   <#include "../../common/includes/base_javascript.html"/>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/bootgrid/jquery.bootgrid.js"></script>
+   <!-- 时间区间选择 -->
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/daterangepicker/moment.min.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/daterangepicker/daterangepicker.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/local/admin.sys.js"></script>
+   <!-- select加强版下拉框 -->
+   <script type="text/javascript">
+		"use strict";
+		var formObj = null, options = null, zTreePower = null;
+		function search(){
+	           var params = $('#search-form').serializeArray();
+	       	//grid.search(params);
+	       	$("#grid").bootgrid("search", params);
+	       	return false;
+	    }
+	    $(function () {
+		    $("#grid").bootgrid({
+			    ajax: true,
+			    url: "${(request.contextPath)!}${admin}/log/list",
+			    selection: true,
+			    multiSelect: true,
+			    rowSelect: true,
+			    keepSelection: false,
+			    formatters: {
+			        "fLogTime": function(column, row){
+			        	return yt.formatDate(new Date(Number(row.log_time)),'-',true);
+			        },
+			        "fUserName": function(column, row){
+			        	return row.user_name;
+			        },
+			        "fLogParams":function(column, row){
+			        	return '<span title="'+row.log_uri+'">'+row.log_uri+'</span>';
+			        }
+			    }
+			});
+		});
+   </script>
+</body>
+</html>

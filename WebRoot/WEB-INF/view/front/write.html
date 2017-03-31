@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#assign title = "${(dto.article_title)!'发布文章'}"/>
+<#include "common/css.html"/>
+<link rel='stylesheet' id='editor-css'  href='${(request.contextPath)!}/static/f/plugins/wangEditor/css/wangEditor.css?ver=5.3' type='text/css' media='all' />
+<link rel='stylesheet' id='editor-css'  href='${(request.contextPath)!}/static/f/plugins/tagEditor/jquery.tag-editor.css?ver=5.3' type='text/css' media='all' />
+<style type="text/css">
+	#editor-container .wangEditor-container {border-color:#EEEEEE;}
+	#editor {min-height:800px;}
+</style>
+</head>
+<body class="write uimo ui-c3">
+<section class="container">
+  <#include "common/header.html"/>
+  <div class="content-wrap">
+    <div class="content" id="content">
+    	<form id="articleForm" class="qt-form" action="#" method="post">
+			<div style="background:#FFF;">
+	        	<div class="article-container article-title-container">
+	        		<select id="article_source" class="qt-select" name="art.article_source">
+	        			<#if dto??>
+	        				<option value="0" <#if dto.article_source == 0>selected</#if>>原创</option>
+	        				<option value="1" <#if dto.article_source == 1>selected</#if>>转载</option>
+	        			<#else>
+	        				<option value="0">原创</option>
+	        				<option value="1">转载</option>
+	        			</#if>
+	        		</select>
+	            	<input type="text" id="artilce-title" name="art.article_title" value="${(dto.article_title)!''}" placeholder="标题" autocomplete="off" tabindex="1"/>
+	            	<input type="hidden" name="art.article_no" value="${(dto.article_no)!''}"/>
+					<input type="hidden" name="art.article_summary" id="summary" value="${(dto.article_summary)!''}"/>
+					<input type="hidden" name="art.article_imgs" id="artimgs" value="${(dto.article_imgs)!''}"/>
+	            </div>
+	            <div class="article-container article-type-container">
+	            	<ul class="select-container">
+	            		<li class="select-c-li select-label">&nbsp;&nbsp;栏目：</li>
+	            		<!-- <li class="select-c-li select-content"><select id="article_theme" class="qt-select" name="art.article_theme">${dicts!}</select></li> -->
+	            		<li class="select-c-li select-content">
+	            			<input type="hidden" id="article_theme" name="art.article_theme" value="">
+	            			<div id="theme-choosed" class="select-choosed">
+	            				<span></span>
+	            				<i class="glyphicon glyphicon-chevron-down"></i>
+	            			</div>
+	            			<ul id="theme-options" class="select-options">${dicts!}</ul>
+	            		</li>
+	            	</ul>
+	            	<ul class="select-container">
+	            		<li class="select-c-li select-label">分类：</li>
+	            		<li class="select-c-li select-content">
+	            			<input type="hidden" id="article_type" name="art.article_type" value="${(dto.article_type)!'0'}">
+	            			${types!}
+	            		</li>
+	            	</ul>
+	            	<ul class="select-container">
+	            		<li class="select-c-li select-label">权限：</li>
+	            		<li class="select-c-li select-content">
+	            			<input type="hidden" id="article_flag" name="art.article_flag" value="${(dto.article_flag)!'0'}">
+	            			<div id="flg-choosed" class="select-choosed">
+	            				<span>所有人可见</span>
+	            				<i class="glyphicon glyphicon-chevron-down"></i>
+	            			</div>
+	            			<ul id="flg-options" class="select-options">
+		            			<#if dto??>
+		            				<li class="flg-opt <#if dto.article_flag == 0>selected</#if>" data-no="0">所有人可见</li>
+		            				<li class="flg-opt <#if dto.article_flag == 1>selected</#if>" data-no="1">仅自己可见</li>
+		            			<#else>
+		            				<li class="flg-opt selected" data-no="0">所有人可见</li>
+		            				<li class="flg-opt" data-no="1">仅自己可见</li>
+		            			</#if>
+	            			</ul>
+						</li>
+	            	</ul>
+	            </div>
+	            <div class="edit-middle">
+	            	<#if dto??>
+			           	<div class="edit-art-from" <#if dto.article_source == 1>style="display:block;"</#if>>
+			           		<label>&nbsp;&nbsp;来源：</label>
+			           		<input class="qt-select" style="width:600px;" type="text" name="art.article_from" value="${(dto.article_from)!}" <#if dto.article_source == 0>disabled="disabled"</#if> id="article_from" placeholder="请输入文章来源地址...">
+			           	</div>
+			        <#else>
+			        	<div class="edit-art-from">
+			           		<label>&nbsp;&nbsp;来源：</label>
+			           		<input class="qt-select" style="width:600px;" type="text" name="art.article_from" value="" disabled="disabled" id="article_from" placeholder="请输入文章来源地址...">
+			           	</div>
+			        </#if>
+					<div class="edit-art-info" style="position: relative;">
+						<label style="position:relative; top:-10px;">&nbsp;&nbsp;标签：</label>
+						<input type="text" id="article_tags" name="art.article_tags" value="${(dto.article_tags)!}"/>
+						<input type="hidden" id="article_tag_ids" name="art.article_tag_ids" value="${(dto.article_tag_ids)!}"/>
+						<#if dto??>
+							<input type="hidden" name="article_old_tag_ids" value="${(dto.article_tag_ids)!}"/><!-- 修改时用于判断标签是否存在修改 -->
+						</#if>
+						${tags!''}
+					</div>
+	            </div>
+	            <div class="article-container article-content-container" id="editor-container"><textarea name="art.article_content" id="editor" style="visibility:hidden;" tabindex="2">${(dto.article_content)!"<p>请输入内容...</p>"}</textarea></div>
+	        </div>
+        </form>
+    </div>
+  </div>
+
+  <#include "common/footer.html"/>
+</section>
+<script>
+var cnt = document.getElementById('content');
+var ed = document.getElementById('editor');
+var ah = window.screen.availHeight;
+</script>
+<#include "common/javascript.html"/>
+<script type='text/javascript' src='${(request.contextPath)!}/static/f/plugins/wangEditor/js/wangEditor.min.js?ver=2.1.18'></script>
+<script type='text/javascript' src='${(request.contextPath)!}/static/f/plugins/tagEditor/jquery.tag-editor.min.js?ver=1.0.3'></script>
+<script type='text/javascript' src='${(request.contextPath)!}/static/f/plugins/wangEditor/js/custom-menu.min.js?ver=5.3'></script>
+<!--引入 xss.js 文件-->
+<script type='text/javascript' src='${(request.contextPath)!}/static/f/plugins/wangEditor/js/xss.js?ver=5.3'></script>
+<script type="text/javascript">
+	var redirctUrl = '${redirctUrl!""}';
+	var mapping = $.parseJSON('${mapping!"{}"}');
+</script>
+</body>
+</html>

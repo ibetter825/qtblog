@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<html lang="en"> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+   <meta charset="utf-8" />
+   <title>前台首页管理</title>
+   <#include "../../common/includes/base_header.html"/>
+   <link rel="stylesheet" type="text/css" href="/static/a/css/dropzone.css">
+   <link rel="stylesheet" href="${(request.contextPath)!}/static/a/js/validation/css/validationEngine.jquery.css"/>
+   <style type="text/css">
+   	.widget-tabs .nav-tabs > li {float:left;}
+   	.widget-tabs .nav-tabs > .active > a {font-family:"微软雅黑";}
+   	
+   	#uploadForm .dz-preview {width:100%; margin:0;}
+   	#uploadForm .dz-image {width:100%;}
+   	#uploadForm .dz-image img {margin:0 auto;}
+   </style>
+</head>
+<body style="background-color: #FFFFFF;">
+   <div class="container-fluid">
+      <div class="row-fluid">
+      	<#include "../../common/includes/route.html"/>
+      </div>
+      <div class="row-fluid">
+      	<div class="span12">
+             <div class="widget widget-tabs blue">
+                <div class="widget-title"></div>
+                <div class="widget-body">
+                    <div class="tabbable ">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#t-slide" data-toggle="tab">幻灯推荐</a></li>
+                            <li class=""><a href="#t-focus" data-toggle="tab">聚焦推荐</a></li>
+                            <li class=""><a href="#t-hot" data-toggle="tab">热门推荐</a></li>
+                        </ul>
+                        <div class="clearfix">
+	                      <div class="btn-group">
+                          	<span id="add" class="btn btn-primary" onclick="refreshCache(1);">
+                            	<i class="icon-refresh"></i>&nbsp;&nbsp;首页缓存
+                            </span><span class="btn btn-info" onclick="refreshCache(2);">
+                            	<i class="icon-refresh"></i>&nbsp;&nbsp;最新发布
+                            </span><span class="btn btn-success" onclick="refreshCache(3);">
+                            	<i class="icon-refresh"></i>&nbsp;&nbsp;热门标签
+                            </span><span class="btn btn-warning" onclick="refreshCache(4);">
+                            	<i class="icon-refresh"></i>&nbsp;&nbsp;随机推荐
+                            </span><span class="btn btn-inverse" onclick="refreshCache(5);">
+                            	<i class="icon-refresh"></i>&nbsp;&nbsp;一周热门
+                            </span><span class="btn btn-danger" onclick="refreshCache(6);">
+                            	<i class="icon-refresh"></i>&nbsp;&nbsp;导航缓存
+                            </span><span class="btn btn-primary" onclick="refreshCache(7);">
+                            	<i class="icon-refresh"></i>&nbsp;&nbsp;名人名言
+                            </span><span class="btn btn-info" onclick="refreshCache(8);">
+                            	<i class="icon-refresh"></i>&nbsp;&nbsp;友情链接
+                            </span>
+	                      </div>
+	                    </div>
+	                    <div class="space15"></div>
+                        <div class="tab-content">
+                        	<div class="tab-pane active" id="t-slide" title="图片尺寸 : 860*320">
+                                <div class="metro-nav" id="slide"></div>
+                            </div>
+                            <div class="tab-pane" id="t-focus" title="大图尺寸 : 360*266，小图尺寸 : 240*180">
+                                <div class="metro-nav" id="focus"></div>
+                            </div>
+                            <div class="tab-pane" id="t-hot" title="图片尺寸 : 240*180">
+                                <div class="metro-nav" id="hot"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- model -->
+      <div id="model-hp" class="modal hide fade widget blue" tabindex="-1" role="dialog" data-remote="" aria-labelledby="model-hp-label" aria-hidden="true">
+       <div class="modal-header widget-title">
+           <h4 id="model-hp-label"><i class="icon-cog"></i> 设置</h4>
+           <span class="tools">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+           </span>
+       </div>
+       <form class="cmxform form-horizontal" id="hp-form" method="post" action="#">
+	       <div class="modal-body" style="max-height:500px;">
+	       	   <div class="row-fluid">
+					<div class="control-group ">
+						<div class="span4">
+					    	<label class="control-label" for="hp_title">标题:</label>
+					    </div>
+					    <div class="span6">
+					        <input class="input-block-level validate[required,maxSize[50]]" id="hp_title" name="hp.hp_title" type="text"/>
+					        <input id="hp_type" name="hp.hp_type" type="hidden" value=""/>
+					        <input id="hp_no" name="hp.hp_no" type="hidden" value=""/>
+					        <input id="hp_seq" name="hp.hp_seq" type="hidden" value="" />
+					    </div>
+					</div>
+					<div class="control-group ">
+						<div class="span4">
+					    	<label class="control-label" for="hp_uri">链接:</label>
+					    </div>
+					    <div class="span6">
+					    	<input class="input-block-level validate[required]" id="hp_uri" name="hp.hp_uri" type="text"/>
+					    </div>
+					</div>
+					<!-- <div class="control-group ">
+						<div class="span4">
+					    	<label class="control-label" for="hp_seq">排序:</label>
+					    </div>
+					    <div class="span6">
+					    	<input class="input-block-level validate[required,min[0],max[100]]" id="hp_seq" value="0" name="hp.hp_seq" type="number" />
+					    </div>
+					</div> -->
+					<div class="control-group">
+						<div class="span4">
+	                   		<label class="control-label">图片:</label>
+	                   		<input class="input-block-level " id="hp_img" name="hp.hp_img" type="hidden" />
+	                   	</div>
+	                   	<div class="span6">
+		                      <div id="uploadForm" class="dropzone" style="border:1px solid #ddd;"></div>
+	                   </div>
+	                </div>
+		       </div>
+		     </div>
+	       <div class="modal-footer">
+	       	   <button class="btn btn-primary" type="submit">保存</button>
+	           <button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">取消</button>
+	       </div>
+       </form>
+   </div>
+   
+   <#include "../../common/includes/base_javascript.html"/>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/others/dropzone.js"></script>
+      <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/lang/jquery.validationEngine-zh_CN.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/jquery.validationEngine.js"></script>
+   <script type="text/javascript" src="${(request.contextPath)!}/static/a/js/validation/js/validationEngine-addition-rules.js"></script>
+   <!-- select加强版下拉框 -->
+   <script type="text/javascript">
+		"use strict";
+		var colors = ['green','orange','yellow','blue','red','purple','brown','terques','thistle'];
+		var uploadedFile = {};
+		/*
+		* 打开添加模板 type:首页配置分类
+		*/
+		function add(type, obj){
+			$('#hp_type').val(type);
+			$('#hp_seq').val($(obj).attr('data-hp-seq'));
+	    	$('#model-hp').modal('show');
+	    }
+		function edit(type, obj){
+			var hp = $(obj);
+			$('#hp_type').val(type);
+			$('#hp_no').val(hp.attr('data-hp-no'));
+			$('#hp_title').val(hp.attr('data-hp-title'));
+			$('#hp_uri').val(hp.attr('data-hp-uri'));
+			$('#hp_seq').val(hp.attr('data-hp-seq'));
+			$('#hp_img').val(hp.attr('data-hp-img'));
+			initImg('${(request.contextPath)!}'+hp.attr('data-hp-img'));
+	    	$('#model-hp').modal('show');
+	    }
+		//关闭Model后清空表单数据
+	   $('#model-hp').on('hidden.bs.modal', function (e) {
+		   if(uploadedFile.name){
+			   uploadedFile['handle'] = 1;//表示模态框隐藏时移除文件，但不删除服务器的文件
+			   myDropzone.removeFile(uploadedFile);
+		   }
+		  	$('#hp-form')[0].reset();
+		});
+		
+	    getHomePages();
+		//获取首页配置，并拼装成html
+		function getHomePages(no, type){
+			var url = '${(request.contextPath)!}${admin}/hp/query';
+			if(no)
+				url += '/'+no+'-'+type;
+			$.post(url,function(data){
+				if(data.success){
+					var res = data.data.res;
+					if(!no){
+						var hp,slide = [], large = [], focus = [], hot = [];
+						for(var key in res){
+							if(key === 'slide'){//幻灯片
+								for(var i = 0; i < 5; i++){//最多五张幻灯片
+									hp = res[key][i];
+									slide.push(getHtml(hp, i, key));
+								}
+								$('#slide').empty().append(slide.join(''));
+								slide = [];
+							}else if(key === 'large'){//聚焦图大 只有一张
+								hp = res[key][0];
+								large.push(getHtml(hp, 0, key));
+							}else if(key === 'focus'){//聚焦图小 最多4张
+								for(var i = 0; i < 4; i++){
+									hp = res[key][i];
+									focus.push(getHtml(hp, i, key));
+								}
+							}else if(key === 'hot'){//首页热门推荐 最多8张
+								for(var i = 0; i < 8; i++){
+									hp = res[key][i];
+									hot.push(getHtml(hp, i, key));
+								}
+								$('#hot').empty().append(hot.join(''));
+								hot = [];
+							}
+						}
+						$('#focus').empty().append(large.join('')+focus.join(''));
+						large = []; focus = [];
+					}else
+						$('#hp-'+no).replaceWith(getHtml(res[type][0], res[type][0].hp_seq, type));
+				}else
+					yt.alert('查询首页配置出错，联系管理员查询问题');
+			},'json');
+		}
+		//更新首页缓存
+		function refreshCache(type){
+			//1:更新首页hpdata缓存 2:更新首页最新文章缓存 3:更新首页热门缓存 4:更新随机推荐缓存 5:一周热门缓存 6:导航缓存 7:名人名言 8:友情链接
+			$.post('${(request.contextPath)!}${admin}/hp/refresh/'+type,function(data){
+				yt.alert(data);
+			},'json');
+		}
+		// 校验插件初始化，注意校验只能初始化一遍（注意需要在全局设置之后进行初始化，这样全局设置才起作用）
+        $("#hp-form").validationEngine('attach', {
+			  promptPosition: 'bottomRight',
+			  prettySelect: true,
+			  onSuccess: false,
+			  ajaxFormValidation: true,
+			  ajaxFormValidationURL: '${(request.contextPath)!}${admin}/hp/save',
+			  ajaxFormValidationMethod: 'post',
+			  onAjaxFormComplete: function(status, form, json, options){
+					$('#model-hp').modal('hide');
+					if(!json.success)
+						$.post('${(request.contextPath)!}${admin}/file/del',{path:$('#hp_img').val()});
+					else
+						getHomePages($('#hp_no').val(), $('#hp_type').val());
+				    yt.alert(json);
+		      }
+		});
+        
+		Dropzone.autoDiscover = false;
+		var myDropzone = new Dropzone("#uploadForm", {
+			url: '${(request.contextPath)!}/upload?upload_type=hpimg',
+			method: 'post',
+			maxFiles: 1,
+			acceptedFiles: "image/*",
+			addRemoveLinks: true,
+			dictDefaultMessage: '<i class="icon-picture"></i>&nbsp;选择图片',
+			dictRemoveFile: '移除图片',
+			dictInvalidFileType:'请选择图片',
+			init: function() {
+	            this.on("success", function(file, data) {
+	            	uploadedFile = file;
+	            	yt.alert(data);
+	            	if(data.success){
+		            	var filepath = data.data.path;
+		            	$('#hp_img').val(filepath);
+	            	}else{
+	            		if(uploadedFile.name){
+	         			   uploadedFile['handle'] = 1;//表示模态框隐藏时移除文件，但不删除服务器的文件
+	         			   myDropzone.removeFile(uploadedFile);
+	         		   }
+	            	}
+	            });
+	            this.on("removedfile", function(file) {
+	            	myDropzone.options.maxFiles = 1;
+	            	if(file.name === 'uploadedImg' || file.name === uploadedFile.name)
+	            		uploadedFile = {};
+	            	if(!file.handle){
+	            		var imgpath = $('#hp_img').val();
+	            		$('#hp_img').val('');
+	            		$.post('${(request.contextPath)!}${admin}/file/del',{path:imgpath});
+	            	}
+	            });
+	        }
+	    });
+		//初始化dropzone图片
+		function initImg(uri){
+			var mockFile = { name: 'uploadedImg', accepted:true };
+			myDropzone.emit("addedfile", mockFile);
+			myDropzone.emit("thumbnail", mockFile, uri);
+			myDropzone.createThumbnailFromUrl(mockFile, uri);
+			myDropzone.emit("complete", mockFile);
+			myDropzone.options.maxFiles = 0;//myDropzone.options.maxFiles - 1;
+			uploadedFile = mockFile;
+		}
+		//initImg('${(request.contextPath)!}/static/a/image/avatar1.jpg');
+		
+		function getHtml(hp, i, key){
+			var stl = '', clz = '';
+			if(key === 'large'){
+				stl = ' style="height:244px;"';
+				clz = ' double';
+			}else if(key === 'focus')
+				clz = ' double';
+			var html = [];
+			if(hp){
+				html.push('<div id="hp-'+hp.hp_no+'" class="metro-nav-block nav-block-'+colors[i]+clz+'"'+stl+'>');
+				html.push('<a href="javascript:;" onclick="edit(\''+key+'\',this);" data-hp-no="'+hp.hp_no+'" data-hp-title="'+hp.hp_title+'" data-hp-img="'+hp.hp_img+'" data-hp-uri="'+hp.hp_uri+'" data-hp-seq="'+hp.hp_seq+'"><i class="icon-picture"></i><div class="info">'+hp.hp_seq+'</div>');
+				html.push('<div class="status">'+hp.hp_title+'</div></a></div>');
+			}else{
+				html.push('<div class="metro-nav-block nav-block-grey'+clz+'"'+stl+'>');
+				html.push('<a href="javascript:;" onclick="add(\''+key+'\',this);" data-hp-seq="'+i+'" class="text-center"><i class="icon-plus"></i><div class="info">'+i+'</div>');
+				html.push('<div class="status">添加</div></a></div>');
+			}
+			return html.join('');
+		}
+   </script>
+</body>
+</html>

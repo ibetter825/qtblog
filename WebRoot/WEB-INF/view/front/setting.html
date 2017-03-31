@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#assign title = "个人信息设置中心"/>
+<#include "common/css.html"/>
+<link rel="stylesheet" href="${(request.contextPath)!}/static/f/css/validation.css"/>
+<style type="text/css">
+.setting .content {margin-right:0;}
+</style>
+</head>
+   <body class="setting uimo ui-c3">
+	<section class="container">
+	  <#include "common/header.html"/>
+	  <div class="content-wrap">
+	    <div class="content">
+	      <div class="title">
+	      	  <span class="title-tag"><a href="javascript:void(0);" onclick="acc.setup('base');">基础设置</a></span>
+	      	  <span class="title-tag"><a href="javascript:void(0);" onclick="acc.setup('avatar');">修改头像</a></span>
+	      	  <span class="title-tag"><a href="javascript:void(0);" onclick="acc.setup('pwd');">修改密码</a></span>
+	      	  <span class="title-tag"><a href="javascript:void(0);" onclick="acc.setup('account');">基础设置</a></span>
+	      </div>
+	      <div id="content-main">
+	      	<section class="setting-content" id="base-setting" style="display:block;">
+	      		<form id="base-form" class="setting-form" action="" method="post" autocomplete="off">
+	      			<p>
+		   				<label>用户名：</label>
+		   				<input type="text" class="form-control" name="" value="${(account.acc_name)!}" disabled="disabled"/>
+		   				<input type="hidden" id="acc_no" name="info.acc_no" value="${(account.acc_no)!}"/>
+		   				<input type="hidden" name="type" value="1"/>
+		   			</p>
+	      			<p>
+		   				<label>昵称：</label>
+		   				<input type="text" id="nick_name" class="form-control validate[required,funcCall[checkNickName],ajax[ajaxNickName]" name="info.nick_name" value="${(account.nick_name)!}" autocomplete="off"/>
+		   			</p>
+		   			<p>
+	   					<label>邮箱：</label>
+	   					<input type="text" class="form-control" name="" value="${(account.acc_email)!}" disabled="disabled"/>
+	   				</p>
+	   				<p>
+	   					<label>手机：</label>
+	   					<input type="text" class="form-control" name="" value="${(account.acc_phone)!}" disabled="disabled"/>
+	   				</p>
+	   				<p>
+		   				<label>简介：</label>
+		   				<textarea rows="5" id="acc_intro" class="form-control validate[maxSize[100]]" name="info.acc_intro">${(account.acc_intro)!}</textarea>
+		   			</p>
+		   			<p>
+	   					<label>个人主页：</label>
+	   					<input type="text" class="form-control" name="" value=""/>
+	   				</p>
+	   				<p>
+	   					<input type="submit" class="btn" value="保存"/>
+	   				</p>
+	      		</form>
+	      	</section>
+	      	<section class="setting-content" id="avatar-setting">
+	      		<div id="altContent"></div>
+	      	</section>
+	      	<section class="setting-content" id="pwd-setting">
+	      		<form id="pwd-form" class="setting-form" action="" method="post" autocomplete="off">
+	      			<p>
+		   				<label>当前密码：</label>
+		   				<input type="text" class="form-pwd form-control validate[required,minSize[6],maxSize[18],funcCall[checkAccNo]]" id="cur_pwd" name="cur_pwd" value=""/>
+		   				<input type="hidden" name="type" value="3"/>
+		   			</p>
+		   			<p>
+	   					<label>新密码：</label>
+	   					<input type="text" class="form-pwd form-control validate[required,minSize[6],maxSize[18],funcCall[checkAccNo]]" id="new_pwd" name="new_pwd" value=""/>
+	   				</p>
+	   				<p>
+	   					<label>确认密码：</label>
+	   					<input type="text" class="form-pwd form-control validate[required,minSize[6],maxSize[18],funcCall[checkAccNo]]" id="cfm_pwd" name="cfm_pwd" value=""/>
+	   				</p>
+	   				<p>
+	   					<input type="submit" class="btn" value="保存"/>
+	   				</p>
+	   			</form>
+	      	</section>
+	      	<section class="setting-content" id="account-setting">
+	      		账号设置
+	      	</section>
+	      </div>
+	    </div>
+	  </div>
+	  <#include "common/footer.html"/>
+	</section>
+	<#include "common/javascript.html"/>
+	<script type='text/javascript' src='${(request.contextPath)!}/static/f/js/qt-opt.js?ver=5.3'></script>
+    <script type="text/javascript" src="${(request.contextPath)!}/static/f/js/validation.js"></script>
+	<script type="text/javascript">
+	var acc_avatar = '${(account.acc_avatar)!}';
+	// 校验插件初始化，注意校验只能初始化一遍（注意需要在全局设置之后进行初始化，这样全局设置才起作用）
+	var valiObj = {
+		  promptPosition: 'centerRight:0, -4',
+		  onSuccess: false,
+		  scroll: false,
+		  ajaxFormValidation: true,
+		  showOneMessage: true,
+		  ajaxFormValidationURL: '${(request.contextPath)!}/acc/set',
+		  ajaxFormValidationMethod: 'post',
+		  onAjaxFormComplete: function(status, form, json, options){
+				if(json.success)//修改成功
+					layer.msg("操作成功", {time:800, icon:1}, function(){location.reload();});
+				else{
+					var errs = json.data, isEmpty = true;
+					for(var e in errs){
+						isEmpty = false;
+						$('#'+e).validationEngine('showPrompt',errs[e],'error');
+					}
+					if(isEmpty)
+						layer.msg(json.msg, {time:800, icon:5});
+				}
+	      }
+	};
+    $("#base-form").validationEngine('attach', valiObj);
+    $("#pwd-form").validationEngine('attach', valiObj);
+   </script>
+  </body>
+</html>
